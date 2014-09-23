@@ -25,17 +25,25 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	TSubobjectPtr<UCameraComponent> FollowCamera;
 
-	/** The jog speed of the character */
+	/** The speed of the character while jogging */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Movement")
 	float JogSpeed;
 
-	/** The sprint speed of the character */
+	/** The speed of the character while sprinting */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Movement")
 	float SprintSpeed;
+
+	/** The speed of the character while aiming */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Movement")
+	float AimSpeed;
 
 	/** Indicates if the character is sprinting */
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsSprinting;
+
+	/** Indicates if the character is aiming */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	bool bIsAiming;
 
 	virtual void BeginPlay() override;
 
@@ -51,6 +59,12 @@ protected:
 
 	/** The character stops sprinting */
 	void SprintStop();
+
+	/** The character starts aiming */
+	void AimStart();
+
+	/** The character stops aiming */
+	void AimStop();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

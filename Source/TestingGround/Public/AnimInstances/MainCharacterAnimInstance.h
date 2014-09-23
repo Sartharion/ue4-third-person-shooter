@@ -17,5 +17,19 @@ class TESTINGGROUND_API UMainCharacterAnimInstance : public UAnimInstance
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	float Speed;
 
+	/**
+	 * The direction of the character in degrees in range [-180, 180].
+	 * 0 -> Forward
+	 * -90 -> Left
+	 * 90 -> Right
+	 * +-180 -> Backward
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	float Direction;
+
+	/** Indicates if the character is aiming */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	bool bIsAiming;
+
 	virtual void BlueprintUpdateAnimation(float DeltaTimeX) override;
 };

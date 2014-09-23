@@ -18,6 +18,7 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->bIsSprinting = false;
 	this->SprintSpeed = 700.0f; // in centimeters / second
 	this->JogSpeed = 450.0f; // in centimeters / second
+	this->AimSpeed = 200.0f; // in centimeters / second
 	this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
 	this->CharacterMovement->bOrientRotationToMovement = true;
 	this->CharacterMovement->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // The character rotates at this rotation rate
@@ -82,12 +83,53 @@ void AMainCharacter::MoveRight(float AxisValue)
 
 void AMainCharacter::SprintStart()
 {
-	this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
+	this->bIsSprinting = true;
+
+	if (!this->bIsAiming)
+	{
+		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
+	}
 }
 
 void AMainCharacter::SprintStop()
 {
-	this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+	this->bIsSprinting = false;
+
+	if (!this->bIsAiming)
+	{
+		this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+	}
+}
+
+void AMainCharacter::AimStart()
+{
+	this->bIsAiming = true;
+
+	// While the character is aiming he must use the controller's yaw rotation
+	// and must not orient his rotation according to movement
+	this->bUseControllerRotationYaw = true;
+	this->CharacterMovement->bOrientRotationToMovement = false;
+
+	this->CharacterMovement->MaxWalkSpeed = this->AimSpeed;
+}
+
+void AMainCharacter::AimStop()
+{
+	this->bIsAiming = false;
+
+	// While the character is not aiming he must not use the controller's yaw rotation
+	// and must orient his rotation according to momvement
+	this->bUseControllerRotationYaw = false;
+	this->CharacterMovement->bOrientRotationToMovement = true;
+
+	if (this->bIsSprinting)
+	{
+		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
+	}
+	else
+	{
+		this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+	}
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
@@ -103,6 +145,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 
 		InputComponent->BindAction("Sprint", IE_Pressed, this, &AMainCharacter::SprintStart);
 		InputComponent->BindAction("Sprint", IE_Released, this, &AMainCharacter::SprintStop);
+		InputComponent->BindAction("Aim", IE_Pressed, this, &AMainCharacter::AimStart);
+		InputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimStop);
 	}
 }
 

@@ -14,7 +14,9 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->bUseControllerRotationRoll = false;
 	this->bUseControllerRotationYaw = false;
 
-	// Configure default character movement
+	// Configure default character state and movement
+	this->bIsAiming = false;
+	this->bIsFiring = false;
 	this->bIsSprinting = false;
 	this->SprintSpeed = 700.0f; // in centimeters / second
 	this->JogSpeed = 450.0f; // in centimeters / second
@@ -132,6 +134,16 @@ void AMainCharacter::AimStop()
 	}
 }
 
+void AMainCharacter::FireStart()
+{
+	this->bIsFiring = true;
+}
+
+void AMainCharacter::FireStop()
+{
+	this->bIsFiring = false;
+}
+
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
@@ -147,6 +159,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 		InputComponent->BindAction("Sprint", IE_Released, this, &AMainCharacter::SprintStop);
 		InputComponent->BindAction("Aim", IE_Pressed, this, &AMainCharacter::AimStart);
 		InputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimStop);
+		InputComponent->BindAction("Fire", IE_Pressed, this, &AMainCharacter::FireStart);
+		InputComponent->BindAction("Fire", IE_Released, this, &AMainCharacter::FireStop);
 	}
 }
 

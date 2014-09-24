@@ -45,6 +45,10 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsAiming;
 
+	/** Indicates if the character is firing */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	bool bIsFiring;
+
 	virtual void BeginPlay() override;
 
 protected:
@@ -65,6 +69,12 @@ protected:
 
 	/** The character stops aiming */
 	void AimStop();
+
+	/** The character starts shooting */
+	void FireStart();
+
+	/** The character stops shooting */
+	void FireStop();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

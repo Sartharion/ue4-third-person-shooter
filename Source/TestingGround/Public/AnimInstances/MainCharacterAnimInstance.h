@@ -31,5 +31,9 @@ class TESTINGGROUND_API UMainCharacterAnimInstance : public UAnimInstance
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	bool bIsAiming;
 
+	/** Indicates if the character is firing */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	bool bIsFiring;
+
 	virtual void BlueprintUpdateAnimation(float DeltaTimeX) override;
 };

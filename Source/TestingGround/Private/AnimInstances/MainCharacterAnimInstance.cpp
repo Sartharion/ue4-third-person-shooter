@@ -11,6 +11,7 @@ UMainCharacterAnimInstance::UMainCharacterAnimInstance(const class FPostConstruc
 	this->Speed = 0.0f;
 	this->Direction = 0.0f;
 	this->bIsAiming = false;
+	this->bIsFiring = false;
 }
 
 void UMainCharacterAnimInstance::BlueprintUpdateAnimation(float DeltaTimeX)
@@ -34,9 +35,11 @@ void UMainCharacterAnimInstance::BlueprintUpdateAnimation(float DeltaTimeX)
 		if (MainCharacter != NULL)
 		{
 			this->bIsAiming = MainCharacter->bIsAiming;
+			this->bIsFiring = MainCharacter->bIsFiring;
 
-			GEngine->AddOnScreenDebugMessage(2, 1.0f, FColor::Blue, MainCharacter->bIsAiming ? FString(TEXT("IsAiming: True")) : FString(TEXT("IsAiming: False")));
-			GEngine->AddOnScreenDebugMessage(3, 1.0f, FColor::Yellow, MainCharacter->bIsSprinting ? FString(TEXT("IsSprinting: True")) : FString(TEXT("IsSprinting: False")));
+			GEngine->AddOnScreenDebugMessage(2, 1.0f, FColor::Blue, this->bIsAiming ? FString(TEXT("IsAiming: True")) : FString(TEXT("IsAiming: False")));
+			GEngine->AddOnScreenDebugMessage(3, 1.0f, FColor::Yellow, this->bIsFiring ? FString(TEXT("IsFiring: True")) : FString(TEXT("IsFiring: False")));
+			GEngine->AddOnScreenDebugMessage(4, 1.0f, FColor::Magenta, MainCharacter->bIsSprinting ? FString(TEXT("IsSprinting: True")) : FString(TEXT("IsSprinting: False")));
 		}
 	}
 }

@@ -9,6 +9,9 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 {
 	this->CapsuleComponent->InitCapsuleSize(45.0f, 95.0f);
 
+	// Default offset from the character location for projectiles to spawn
+	this->GunOffset = FVector(50.0f, 30.0f, 50.0f);
+
 	// Don't rotate the character when the controller is rotated (This will affect only the camera)
 	this->bUseControllerRotationPitch = false;
 	this->bUseControllerRotationRoll = false;
@@ -38,13 +41,13 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->CameraBoomExtension->AttachTo(this->CameraBoom, USpringArmComponent::SocketName);
 	this->CameraBoomExtension->TargetArmLength = 25.0f; // The length of the extension
 	this->CameraBoomExtension->bUseControllerViewRotation = false; // Already uses controller view rotation, because is attached to the CameraBoom
-	this->CameraBoomExtension->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f)); // Rotate it -90degrees so that the camera is over the right shoulder of the character
+	this->CameraBoomExtension->SetRelativeRotation(FRotator(-10.0f, -90.0f, 0.0f)); // Rotate it -90degrees so that the camera is over the right shoulder of the character
 
 	// Create a follow camera
 	this->FollowCamera = PCIP.CreateDefaultSubobject<UCameraComponent>(this, TEXT("FollowCamera"));
 	this->FollowCamera->AttachTo(this->CameraBoomExtension, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	this->FollowCamera->bUseControllerViewRotation = false; // Already uses controller view rotation, because is attached to the CameraBoom
-	this->FollowCamera->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
+	this->FollowCamera->SetWorldRotation(FRotator::ZeroRotator);
 
 	// Note: The skeletal mesh and animation blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named BP_MainCharacter (to avoid direct content references in C++)
@@ -137,11 +140,31 @@ void AMainCharacter::AimStop()
 void AMainCharacter::FireStart()
 {
 	this->bIsFiring = true;
+	this->OnFire();
 }
 
 void AMainCharacter::FireStop()
 {
 	this->bIsFiring = false;
+}
+
+void AMainCharacter::OnFire()
+{
+	// Try and fire a projectile
+	if (this->ProjectileClass != NULL && this->bIsAiming)
+	{
+		const FRotator SpawnRotation = this->GetControlRotation();
+
+		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+		const FVector SpawnLocation = this->GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
+
+		UWorld* const World = this->GetWorld();
+		if (World != NULL)
+		{
+			// Spawn the projectile at the muzzle
+			World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+		}
+	}
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)

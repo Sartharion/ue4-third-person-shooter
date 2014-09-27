@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "BallProjectile.h"
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
 
@@ -49,6 +50,14 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsFiring;
 
+	/** Gun muzzle's offset from the characters location */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	FVector GunOffset;
+
+	/** Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	TSubclassOf<ABallProjectile> ProjectileClass;
+
 	virtual void BeginPlay() override;
 
 protected:
@@ -75,6 +84,9 @@ protected:
 
 	/** The character stops shooting */
 	void FireStop();
+
+	/** Fires a projectile */
+	virtual void OnFire();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

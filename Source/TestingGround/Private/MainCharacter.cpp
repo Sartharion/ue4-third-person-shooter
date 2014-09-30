@@ -9,9 +9,6 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 {
 	this->CapsuleComponent->InitCapsuleSize(45.0f, 95.0f);
 
-	// Default offset from the character location for projectiles to spawn
-	this->GunOffset = FVector(50.0f, 30.0f, 50.0f);
-
 	// Don't rotate the character when the controller is rotated (This will affect only the camera)
 	this->bUseControllerRotationPitch = false;
 	this->bUseControllerRotationRoll = false;
@@ -39,7 +36,7 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	// Create an extension for the CameraBoom. This extension is used of OTS (Over The Shoulder) view
 	this->CameraBoomExtension = PCIP.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("CameraBoomExtension"));
 	this->CameraBoomExtension->AttachTo(this->CameraBoom, USpringArmComponent::SocketName);
-	this->CameraBoomExtension->TargetArmLength = 25.0f; // The length of the extension
+	this->CameraBoomExtension->TargetArmLength = 30.0f; // The camera is this distance right of the target
 	this->CameraBoomExtension->bUseControllerViewRotation = false; // Already uses controller view rotation, because is attached to the CameraBoom
 	this->CameraBoomExtension->SetRelativeRotation(FRotator(-10.0f, -90.0f, 0.0f)); // Rotate it -90degrees so that the camera is over the right shoulder of the character
 
@@ -48,6 +45,12 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->FollowCamera->AttachTo(this->CameraBoomExtension, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	this->FollowCamera->bUseControllerViewRotation = false; // Already uses controller view rotation, because is attached to the CameraBoom
 	this->FollowCamera->SetWorldRotation(FRotator::ZeroRotator);
+
+	// Set up the gameplay parameters
+	this->GunOffset = FVector(50.0f, 30.0f, 50.0f); // Default offset from the character location for projectiles to spawn
+	this->CameraBoomLengthWhileAiming = 100.0f; // The camera is this distance behind the target
+	this->CameraBoomExtensionLengthWhileAiming = 50.0f; // The camera is distance right of the target
+	this->CameraTransitionSmoothSpeed = 15.0f; // The smooth speed at which the camera transitions between 2 points in space (A multipllier for DeltaTime)
 
 	// Note: The skeletal mesh and animation blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named BP_MainCharacter (to avoid direct content references in C++)
@@ -58,6 +61,22 @@ void AMainCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+	this->CameraBoomLengthCache = this->CameraBoom->TargetArmLength;
+	this->CameraBoomExtensionLengthCache = this->CameraBoomExtension->TargetArmLength;
+}
+
+void AMainCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (this->bIsAiming)
+	{
+		this->MoveCameraCloserToCharacter(this->CameraTransitionSmoothSpeed, DeltaTime);
+	}
+	else
+	{
+		this->MoveCameraAwayFromCharacter(this->CameraTransitionSmoothSpeed, DeltaTime);
+	}
 }
 
 void AMainCharacter::MoveForward(float AxisValue)
@@ -109,24 +128,20 @@ void AMainCharacter::SprintStop()
 void AMainCharacter::AimStart()
 {
 	this->bIsAiming = true;
-
-	// While the character is aiming he must use the controller's yaw rotation
-	// and must not orient his rotation according to movement
-	this->bUseControllerRotationYaw = true;
-	this->CharacterMovement->bOrientRotationToMovement = false;
-
-	this->CharacterMovement->MaxWalkSpeed = this->AimSpeed;
+	
+	this->bUseControllerRotationYaw = true; // While the character is aiming he must use the controller's yaw rotation
+	this->CharacterMovement->bOrientRotationToMovement = false; // And must not orient his rotation according to movement
+	this->CharacterMovement->MaxWalkSpeed = this->AimSpeed; // Has to use the AimSpeed
 }
 
 void AMainCharacter::AimStop()
 {
 	this->bIsAiming = false;
+	
+	this->bUseControllerRotationYaw = false; // While the character is not aiming he must not use the controller's yaw rotation
+	this->CharacterMovement->bOrientRotationToMovement = true; // And must orient his rotation according to movement
 
-	// While the character is not aiming he must not use the controller's yaw rotation
-	// and must orient his rotation according to momvement
-	this->bUseControllerRotationYaw = false;
-	this->CharacterMovement->bOrientRotationToMovement = true;
-
+	// The character needs to start walking normaly again 
 	if (this->bIsSprinting)
 	{
 		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
@@ -184,6 +199,40 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 		InputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimStop);
 		InputComponent->BindAction("Fire", IE_Pressed, this, &AMainCharacter::FireStart);
 		InputComponent->BindAction("Fire", IE_Released, this, &AMainCharacter::FireStop);
+	}
+}
+
+void AMainCharacter::MoveCameraCloserToCharacter(float TransitionSmoothSpeed, float DeltaTime)
+{
+	if (FMath::Abs(this->CameraBoom->TargetArmLength - this->CameraBoomLengthWhileAiming) > 1.0f)
+	{
+		// The camera must get closer to the character
+		this->CameraBoom->TargetArmLength =
+			FMath::Lerp(this->CameraBoom->TargetArmLength, this->CameraBoomLengthWhileAiming, TransitionSmoothSpeed * DeltaTime);
+	}
+
+	if (FMath::Abs(this->CameraBoomExtension->TargetArmLength - this->CameraBoomExtensionLengthWhileAiming) > 1.0)
+	{
+		// The camera must be at this distance right of the target
+		this->CameraBoomExtension->TargetArmLength =
+			FMath::Lerp(this->CameraBoomExtension->TargetArmLength, this->CameraBoomExtensionLengthWhileAiming, TransitionSmoothSpeed * DeltaTime);
+	}
+}
+
+void AMainCharacter::MoveCameraAwayFromCharacter(float TransitionSmoothSpeed, float DeltaTime)
+{
+	if (FMath::Abs(this->CameraBoom->TargetArmLength - this->CameraBoomLengthCache) > 1.0f)
+	{
+		// The camera must get further away behind the character
+		this->CameraBoom->TargetArmLength =
+			FMath::Lerp(this->CameraBoom->TargetArmLength, this->CameraBoomLengthCache, TransitionSmoothSpeed * DeltaTime);
+	}
+
+	if (FMath::Abs(this->CameraBoomExtension->TargetArmLength - this->CameraBoomExtensionLengthCache) > 1.0)
+	{
+		// The camera must get closer to the right shoulder of the character
+		this->CameraBoomExtension->TargetArmLength =
+			FMath::Lerp(this->CameraBoomExtension->TargetArmLength, this->CameraBoomExtensionLengthCache, TransitionSmoothSpeed * DeltaTime);
 	}
 }
 

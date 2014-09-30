@@ -54,11 +54,25 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	FVector GunOffset;
 
+	/** The length of the camera boom while the character is aiming */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float CameraBoomLengthWhileAiming;
+
+	/** The length of the camera boom extension while the character is aiming */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float CameraBoomExtensionLengthWhileAiming;
+
+	/** The smooth speed at which the camera transitions between 2 points in space (A multipllier for DeltaTime) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float CameraTransitionSmoothSpeed;
+
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<ABallProjectile> ProjectileClass;
 
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	/** Used for moving forward and backward */
@@ -91,4 +105,17 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn unterface
+
+private:
+	/** The starting length of the camera boom */
+	float CameraBoomLengthCache;
+
+	/** The starting length of the camera boom extension */
+	float CameraBoomExtensionLengthCache;
+
+	/** Moves the camera closer to the character */
+	void MoveCameraCloserToCharacter(float TransitionSmoothSpeed, float DeltaTime);
+
+	/** Moves the camera away from the character */
+	void MoveCameraAwayFromCharacter(float TransitionSmoothSpeed, float DeltaTime);
 };

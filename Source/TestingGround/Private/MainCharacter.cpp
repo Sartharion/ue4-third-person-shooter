@@ -47,7 +47,7 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->FollowCamera->SetWorldRotation(FRotator::ZeroRotator);
 
 	// Set up the gameplay parameters
-	this->GunOffset = FVector(50.0f, 30.0f, 50.0f); // Default offset from the character location for projectiles to spawn
+	this->GunOffset = FVector(150.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
 	this->CameraBoomLengthWhileAiming = 100.0f; // The camera is this distance behind the target
 	this->CameraBoomExtensionLengthWhileAiming = 50.0f; // The camera is distance right of the target
 	this->CameraTransitionSmoothSpeed = 15.0f; // The smooth speed at which the camera transitions between 2 points in space (A multipllier for DeltaTime)

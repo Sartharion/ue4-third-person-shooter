@@ -170,12 +170,12 @@ void AMainCharacter::FireStart()
 {
 	this->bIsFiring = true;
 	this->OnFire();
+	this->FireDelayCounter = 0.0f;
 }
 
 void AMainCharacter::FireStop()
 {
 	this->bIsFiring = false;
-	this->FireDelayCounter = 0.0f;
 }
 
 void AMainCharacter::OnFire()

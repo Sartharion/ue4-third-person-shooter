@@ -54,6 +54,10 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	FVector GunOffset;
 
+	/** How many projectiles the character can fire each second */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
+	int32 ShotsPerSecond;
+
 	/** The length of the camera boom while the character is aiming */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	float CameraBoomLengthWhileAiming;
@@ -107,6 +111,12 @@ protected:
 	// End of APawn unterface
 
 private:
+	/** The delay between the firing of projectiles in seconds */
+	float FireDelay;
+
+	/** This is the counter for the FireDelay. The counter counts the seconds and when it reaches the FireDelay the OnFire() is called */
+	float FireDelayCounter;
+
 	/** The starting length of the camera boom */
 	float CameraBoomLengthCache;
 

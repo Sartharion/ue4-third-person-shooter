@@ -48,6 +48,7 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 
 	// Set up the gameplay parameters
 	this->GunOffset = FVector(150.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
+	this->ShotsPerSecond = 10; // How many projectiles the character can fire each second
 	this->CameraBoomLengthWhileAiming = 100.0f; // The camera is this distance behind the target
 	this->CameraBoomExtensionLengthWhileAiming = 50.0f; // The camera is distance right of the target
 	this->CameraTransitionSmoothSpeed = 15.0f; // The smooth speed at which the camera transitions between 2 points in space (A multipllier for DeltaTime)
@@ -63,6 +64,9 @@ void AMainCharacter::BeginPlay()
 	this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
 	this->CameraBoomLengthCache = this->CameraBoom->TargetArmLength;
 	this->CameraBoomExtensionLengthCache = this->CameraBoomExtension->TargetArmLength;
+
+	this->FireDelay = 1.0f / this->ShotsPerSecond;
+	this->FireDelayCounter = 0.0f;
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -72,6 +76,16 @@ void AMainCharacter::Tick(float DeltaTime)
 	if (this->bIsAiming)
 	{
 		this->MoveCameraCloserToCharacter(this->CameraTransitionSmoothSpeed, DeltaTime);
+
+		if (this->bIsFiring)
+		{
+			this->FireDelayCounter += DeltaTime;
+			if (this->FireDelayCounter >= this->FireDelay)
+			{
+				this->OnFire();
+				this->FireDelayCounter = 0.0f;
+			}
+		}
 	}
 	else
 	{
@@ -161,6 +175,7 @@ void AMainCharacter::FireStart()
 void AMainCharacter::FireStop()
 {
 	this->bIsFiring = false;
+	this->FireDelayCounter = 0.0f;
 }
 
 void AMainCharacter::OnFire()

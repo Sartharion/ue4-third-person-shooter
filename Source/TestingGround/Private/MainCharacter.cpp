@@ -78,9 +78,6 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	GEngine->AddOnScreenDebugMessage(10, 1.0f, FColor::White, FString(TEXT("Ammo: ")) + FString::SanitizeFloat(this->Ammo));
-	GEngine->AddOnScreenDebugMessage(11, 1.0f, FColor::White, FString(TEXT("Clip: ")) + FString::SanitizeFloat(this->AmmoInClip));
-
 	if (this->bIsAiming)
 	{
 		this->MoveCameraCloserToCharacter(this->CameraTransitionSmoothSpeed, DeltaTime);

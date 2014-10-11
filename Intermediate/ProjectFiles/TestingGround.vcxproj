@@ -54,10 +54,12 @@
 		<ClCompile Include="..\..\Source\TestingGround\TestingGround.cpp" />
 		<ClInclude Include="..\..\Source\TestingGround\TestingGround.h" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\BallProjectile.cpp" />
+		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterHUD.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacter.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacterAnimInstance.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\SlidingDoor.cpp" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\BallProjectile.h" />
+		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterHUD.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacterAnimInstance.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\SlidingDoor.h" />

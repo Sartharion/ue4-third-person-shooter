@@ -52,6 +52,8 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->CameraBoomLengthWhileAiming = 100.0f; // The camera is this distance behind the target
 	this->CameraBoomExtensionLengthWhileAiming = 50.0f; // The camera is distance right of the target
 	this->CameraTransitionSmoothSpeed = 15.0f; // The smooth speed at which the camera transitions between 2 points in space (A multipllier for DeltaTime)
+	this->AmmoCapacity = 300;
+	this->ClipCapacity = 30;
 
 	// Note: The skeletal mesh and animation blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named BP_MainCharacter (to avoid direct content references in C++)
@@ -67,11 +69,17 @@ void AMainCharacter::BeginPlay()
 
 	this->FireDelay = 1.0f / this->ShotsPerSecond;
 	this->FireDelayCounter = 0.0f;
+
+	this->Ammo = this->AmmoCapacity - this->ClipCapacity;
+	this->AmmoInClip = this->ClipCapacity;
 }
 
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	GEngine->AddOnScreenDebugMessage(10, 1.0f, FColor::White, FString(TEXT("Ammo: ")) + FString::SanitizeFloat(this->Ammo));
+	GEngine->AddOnScreenDebugMessage(11, 1.0f, FColor::White, FString(TEXT("Clip: ")) + FString::SanitizeFloat(this->AmmoInClip));
 
 	if (this->bIsAiming)
 	{
@@ -192,7 +200,30 @@ void AMainCharacter::OnFire()
 		if (World != NULL)
 		{
 			// Spawn the projectile at the muzzle
-			World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+			if (this->AmmoInClip > 0)
+			{
+				World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+				this->AmmoInClip--;
+			}
+		}
+	}
+}
+
+void AMainCharacter::Reload()
+{
+	if (this->AmmoInClip < this->AmmoCapacity)
+	{
+		int32 AmmoToReload = this->ClipCapacity - this->AmmoInClip;
+
+		if (this->Ammo > AmmoToReload)
+		{
+			this->AmmoInClip += AmmoToReload;
+			this->Ammo -= AmmoToReload;
+		}
+		else
+		{
+			this->AmmoInClip += this->Ammo;
+			this->Ammo = 0;
 		}
 	}
 }
@@ -214,6 +245,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 		InputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimStop);
 		InputComponent->BindAction("Fire", IE_Pressed, this, &AMainCharacter::FireStart);
 		InputComponent->BindAction("Fire", IE_Released, this, &AMainCharacter::FireStop);
+		InputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacter::Reload);
 	}
 }
 

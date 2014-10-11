@@ -54,10 +54,6 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	FVector GunOffset;
 
-	/** How many projectiles the character can fire each second */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
-	int32 ShotsPerSecond;
-
 	/** The length of the camera boom while the character is aiming */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	float CameraBoomLengthWhileAiming;
@@ -74,37 +70,60 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<ABallProjectile> ProjectileClass;
 
+	/** How many projectiles the character can fire each second */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
+	int32 ShotsPerSecond;
+
+	/** The ammo capacity */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
+	int32 AmmoCapacity;
+
+	/** The clip capacity */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
+	int32 ClipCapacity;
+
+	/** The current amount of ammo that the character has */
+	UPROPERTY(BlueprintReadOnly, Category = "Gameplay | Projectile")
+	int32 Ammo;
+
+	/** The amount of ammo loaded in the clip */
+	UPROPERTY(BlueprintReadOnly, Category = "Gameplay | Projectile")
+	int32 AmmoInClip;
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
 
 protected:
 	/** Used for moving forward and backward */
-	void MoveForward(float AxisValue);
+	virtual void MoveForward(float AxisValue);
 
 	/** Used for moving right and left */
-	void MoveRight(float AxisValue);
+	virtual void MoveRight(float AxisValue);
 
 	/** The character starts sprinting */
-	void SprintStart();
+	virtual void SprintStart();
 
 	/** The character stops sprinting */
-	void SprintStop();
+	virtual void SprintStop();
 
 	/** The character starts aiming */
-	void AimStart();
+	virtual void AimStart();
 
 	/** The character stops aiming */
-	void AimStop();
+	virtual void AimStop();
 
 	/** The character starts shooting */
-	void FireStart();
+	virtual void FireStart();
 
 	/** The character stops shooting */
-	void FireStop();
+	virtual void FireStop();
 
 	/** Fires a projectile */
 	virtual void OnFire();
+
+	/** Reloads the clip of the character */
+	virtual void Reload();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

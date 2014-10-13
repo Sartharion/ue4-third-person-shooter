@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Animation/AnimInstance.h"
+#include "MainCharacter.h"
 #include "MainCharacterAnimInstance.generated.h"
 
 /**
@@ -13,8 +14,12 @@ class TESTINGGROUND_API UMainCharacterAnimInstance : public UAnimInstance
 {
 	GENERATED_UCLASS_BODY()
 
+	/** The PawnOwner of this AnimInstance */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	AMainCharacter* Character;
+
 	/** The speed of the character in centimeters/sec */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	UPROPERTY(BlueprintReadOnly, Category = "State")
 	float Speed;
 
 	/**
@@ -24,16 +29,22 @@ class TESTINGGROUND_API UMainCharacterAnimInstance : public UAnimInstance
 	 * 90 -> Right
 	 * +-180 -> Backward
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	UPROPERTY(BlueprintReadOnly, Category = "State")
 	float Direction;
 
 	/** Indicates if the character is aiming */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	UPROPERTY(BlueprintReadOnly, Category = "State")
 	bool bIsAiming;
 
 	/** Indicates if the character is firing */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	UPROPERTY(BlueprintReadOnly, Category = "State")
 	bool bIsFiring;
 
+	/** Indicates if the character is reloading */
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	bool bIsReloading;
+
 	virtual void BlueprintUpdateAnimation(float DeltaTimeX) override;
+
+	virtual void BlueprintInitializeAnimation() override;
 };

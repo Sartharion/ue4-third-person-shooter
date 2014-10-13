@@ -18,6 +18,7 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->bIsAiming = false;
 	this->bIsFiring = false;
 	this->bIsSprinting = false;
+	this->bIsReloading = false;
 	this->SprintSpeed = 700.0f; // in centimeters / second
 	this->JogSpeed = 450.0f; // in centimeters / second
 	this->AimSpeed = 200.0f; // in centimeters / second
@@ -128,7 +129,7 @@ void AMainCharacter::SprintStart()
 {
 	this->bIsSprinting = true;
 
-	if (!this->bIsAiming)
+	if (!this->bIsAiming && !this->bIsReloading)
 	{
 		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
 	}
@@ -173,9 +174,12 @@ void AMainCharacter::AimStop()
 
 void AMainCharacter::FireStart()
 {
-	this->bIsFiring = true;
-	this->OnFire();
-	this->FireDelayCounter = 0.0f;
+	if (!this->bIsReloading)
+	{
+		this->bIsFiring = true;
+		this->OnFire();
+		this->FireDelayCounter = 0.0f;
+	}
 }
 
 void AMainCharacter::FireStop()
@@ -186,7 +190,10 @@ void AMainCharacter::FireStop()
 void AMainCharacter::OnFire()
 {
 	// Try and fire a projectile
-	if (this->ProjectileClass != NULL && this->bIsAiming)
+	if (this->ProjectileClass != NULL &&
+		this->bIsAiming &&
+		!this->bIsReloading &&
+		this->AmmoInClip > 0)
 	{
 		const FRotator SpawnRotation = this->GetControlRotation();
 
@@ -197,18 +204,50 @@ void AMainCharacter::OnFire()
 		if (World != NULL)
 		{
 			// Spawn the projectile at the muzzle
-			if (this->AmmoInClip > 0)
-			{
-				World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
-				this->AmmoInClip--;
-			}
+			World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+			this->AmmoInClip--;
 		}
+	}
+}
+
+void AMainCharacter::ReloadStart()
+{
+	if (this->AmmoInClip < this->ClipCapacity &&
+		this->Ammo > 0)
+	{
+		this->bIsFiring = false;
+		this->bIsReloading = true;
+
+		if (!this->bIsAiming)
+		{
+			this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+		}
+	}
+}
+
+void AMainCharacter::ReloadStop()
+{
+	this->bIsReloading = false;
+
+	// The character needs to start walking normaly again 
+	if (this->bIsAiming)
+	{
+		this->CharacterMovement->MaxWalkSpeed = this->AimSpeed;
+	}
+	else if (this->bIsSprinting)
+	{
+		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
+	}
+	else
+	{
+		this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
 	}
 }
 
 void AMainCharacter::Reload()
 {
-	if (this->AmmoInClip < this->AmmoCapacity)
+	if (this->AmmoInClip < this->ClipCapacity &&
+		this->Ammo > 0)
 	{
 		int32 AmmoToReload = this->ClipCapacity - this->AmmoInClip;
 
@@ -223,6 +262,8 @@ void AMainCharacter::Reload()
 			this->Ammo = 0;
 		}
 	}
+
+	this->ReloadStop();
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
@@ -242,7 +283,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 		InputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimStop);
 		InputComponent->BindAction("Fire", IE_Pressed, this, &AMainCharacter::FireStart);
 		InputComponent->BindAction("Fire", IE_Released, this, &AMainCharacter::FireStop);
-		InputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacter::Reload);
+		InputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacter::ReloadStart);
 	}
 }
 

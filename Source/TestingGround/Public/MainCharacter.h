@@ -50,6 +50,10 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsFiring;
 
+	/** Indicates if the character is reloading */
+	UPROPERTY(BlueprintReadWrite, Category = "Character")
+	bool bIsReloading;
+
 	/** Gun muzzle's offset from the characters location */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	FVector GunOffset;
@@ -90,6 +94,10 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(BlueprintReadOnly, Category = "Gameplay | Projectile")
 	int32 AmmoInClip;
 
+	/** Reloads the clip of the character */
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	virtual void Reload();
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
@@ -122,8 +130,11 @@ protected:
 	/** Fires a projectile */
 	virtual void OnFire();
 
-	/** Reloads the clip of the character */
-	virtual void Reload();
+	/** The character starts reloading */
+	virtual void ReloadStart();
+
+	/** The character stops reloading */
+	virtual void ReloadStop();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

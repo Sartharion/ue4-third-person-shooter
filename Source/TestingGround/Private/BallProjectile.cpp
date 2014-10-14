@@ -8,14 +8,14 @@ ABallProjectile::ABallProjectile(const class FPostConstructInitializeProperties&
 	: Super(PCIP)
 {
 	// Use a sphere as a simple collision representation
-	this->CollisionComponent = PCIP.CreateDefaultSubobject<USphereComponent>(this, TEXT("SphereComponent"));
+	this->CollisionComponent = PCIP.CreateDefaultSubobject<USphereComponent>(this, FName(TEXT("SphereComponent")));
 	this->CollisionComponent->InitSphereRadius(5.0f);
 	//this->CollisionComponent->BodyInstance.SetCollisionProfileName("Projectile");			// Collision profiles are defined in DefaultEngine.ini
 	this->CollisionComponent->OnComponentHit.AddDynamic(this, &ABallProjectile::OnHit);		// set up a notification for when this component overlaps something
 	this->RootComponent = this->CollisionComponent;
 
 	// Use a ProjectileMovementComponent to govern this projectile's movement
-	this->ProjectileMovement = PCIP.CreateDefaultSubobject<UProjectileMovementComponent>(this, TEXT("ProjectileComponent"));
+	this->ProjectileMovement = PCIP.CreateDefaultSubobject<UProjectileMovementComponent>(this, FName(TEXT("ProjectileComponent")));
 	this->ProjectileMovement->UpdatedComponent = this->CollisionComponent;
 	this->ProjectileMovement->InitialSpeed = 3000.f;
 	this->ProjectileMovement->MaxSpeed = 3000.f;
@@ -23,7 +23,7 @@ ABallProjectile::ABallProjectile(const class FPostConstructInitializeProperties&
 	this->ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	this->InitialLifeSpan = 3.0f;
 }
 
 void ABallProjectile::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

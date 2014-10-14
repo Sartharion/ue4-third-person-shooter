@@ -9,10 +9,10 @@ ASlidingDoor::ASlidingDoor(const class FPostConstructInitializeProperties& PCIP)
 {
 	this->PrimaryActorTick.bCanEverTick = true;
 
-	this->TriggerVolume = PCIP.CreateDefaultSubobject<UBoxComponent>(this, TEXT("TriggerVolume"));
+	this->TriggerVolume = PCIP.CreateDefaultSubobject<UBoxComponent>(this, FName(TEXT("TriggerVolume")));
 	this->RootComponent = this->TriggerVolume;
 
-	this->DoorMesh = PCIP.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("DoorMesh"));
+	this->DoorMesh = PCIP.CreateDefaultSubobject<UStaticMeshComponent>(this, FName(TEXT("DoorMesh")));
 	this->DoorMesh->bAbsoluteScale = true;
 
 	this->SlideSpeed = 4.0f;

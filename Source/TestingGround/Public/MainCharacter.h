@@ -95,8 +95,15 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	int32 AmmoInClip;
 
 	/** Reloads the clip of the character */
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	virtual void Reload();
+	UFUNCTION(BlueprintCallable, Category = "Character Action")
+	void Reload();
+
+	/**
+	 * The character picks up a specified amount of ammo
+	 * Returns the amount of ammo that the character picked up (He may not pick all of the ammo if he reaches the AmmoCapacity)
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character Action")
+	int32 PickUpAmmo(int32 AmmoAmount);
 
 	virtual void BeginPlay() override;
 

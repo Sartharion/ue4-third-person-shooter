@@ -14,11 +14,11 @@ class TESTINGGROUND_API ABallProjectile : public AActor
 	GENERATED_UCLASS_BODY()
 
 	/** Sphere collision component */
-	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	TSubobjectPtr<class USphereComponent> CollisionComponent;
 
 	/** Projectile movement component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	TSubobjectPtr<class UProjectileMovementComponent> ProjectileMovement;
 
 	/** Called when projectile hits something */

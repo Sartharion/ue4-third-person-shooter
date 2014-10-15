@@ -19,7 +19,7 @@ class TESTINGGROUND_API UMainCharacterAnimInstance : public UAnimInstance
 	AMainCharacter* Character;
 
 	/** The speed of the character in centimeters/sec */
-	UPROPERTY(BlueprintReadOnly, Category = "State")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
 	float Speed;
 
 	/**
@@ -29,19 +29,19 @@ class TESTINGGROUND_API UMainCharacterAnimInstance : public UAnimInstance
 	 * 90 -> Right
 	 * +-180 -> Backward
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "State")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
 	float Direction;
 
 	/** Indicates if the character is aiming */
-	UPROPERTY(BlueprintReadOnly, Category = "State")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
 	bool bIsAiming;
 
 	/** Indicates if the character is firing */
-	UPROPERTY(BlueprintReadOnly, Category = "State")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
 	bool bIsFiring;
 
 	/** Indicates if the character is reloading */
-	UPROPERTY(BlueprintReadOnly, Category = "State")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
 	bool bIsReloading;
 
 	virtual void BlueprintUpdateAnimation(float DeltaTimeX) override;

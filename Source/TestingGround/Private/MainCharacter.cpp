@@ -32,19 +32,19 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->CameraBoom = PCIP.CreateDefaultSubobject<USpringArmComponent>(this, FName(TEXT("CameraBoom")));
 	this->CameraBoom->AttachTo(this->RootComponent);
 	this->CameraBoom->TargetArmLength = 250.0f; // The camera follows at this distance behind the character in centimeters
-	this->CameraBoom->bUseControllerViewRotation = true; // Rotate the arm based on the controller
+	this->CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the control rotation
 
 	// Create an extension for the CameraBoom. This extension is used of OTS (Over The Shoulder) view
 	this->CameraBoomExtension = PCIP.CreateDefaultSubobject<USpringArmComponent>(this, FName(TEXT("CameraBoomExtension")));
 	this->CameraBoomExtension->AttachTo(this->CameraBoom, USpringArmComponent::SocketName);
 	this->CameraBoomExtension->TargetArmLength = 30.0f; // The camera is this distance right of the target
-	this->CameraBoomExtension->bUseControllerViewRotation = false; // Already uses controller view rotation, because is attached to the CameraBoom
+	this->CameraBoomExtension->bUsePawnControlRotation = false; // Already uses pawn control rotation, because is attached to the CameraBoom
 	this->CameraBoomExtension->SetRelativeRotation(FRotator(-10.0f, -90.0f, 0.0f)); // Rotate it -90degrees so that the camera is over the right shoulder of the character
 
 	// Create a follow camera
 	this->FollowCamera = PCIP.CreateDefaultSubobject<UCameraComponent>(this, FName(TEXT("FollowCamera")));
 	this->FollowCamera->AttachTo(this->CameraBoomExtension, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	this->FollowCamera->bUseControllerViewRotation = false; // Already uses controller view rotation, because is attached to the CameraBoom
+	this->FollowCamera->bUsePawnControlRotation = false; // Already uses pawn control rotation, because is attached to the CameraBoom
 	this->FollowCamera->SetWorldRotation(FRotator::ZeroRotator);
 
 	// Set up the gameplay parameters

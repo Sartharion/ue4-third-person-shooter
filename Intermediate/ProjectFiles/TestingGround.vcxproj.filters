@@ -4,7 +4,7 @@
 	<ItemGroup>
 		<None Include="..\..\TestingGround.uproject" />
 		<Filter Include="Source">
-			<UniqueIdentifier>{F599F0EE-A2E7-4351-9417-4A2917B6AC66}</UniqueIdentifier>
+			<UniqueIdentifier>{76790A3C-DA6D-4468-9FF7-B8DA5EE87F55}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround.Target.cs">
 			<Filter>Source</Filter>
@@ -13,7 +13,7 @@
 			<Filter>Source</Filter>
 		</None >
 		<Filter Include="Config">
-			<UniqueIdentifier>{871C895C-6A20-4D6D-B01E-0DC79F326E2A}</UniqueIdentifier>
+			<UniqueIdentifier>{650DFFB8-360E-4E6E-98C2-323F6E94B8E4}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Config\DefaultEngine.ini">
 			<Filter>Config</Filter>
@@ -25,7 +25,7 @@
 			<Filter>Config</Filter>
 		</None >
 		<Filter Include="Source\TestingGround">
-			<UniqueIdentifier>{8BA1C5DC-F2EB-49E9-9485-F39F7A58876B}</UniqueIdentifier>
+			<UniqueIdentifier>{BA70B0CF-4D46-452A-88AB-F4056546C26E}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround\TestingGround.Build.cs">
 			<Filter>Source\TestingGround</Filter>
@@ -37,7 +37,7 @@
 			<Filter>Source\TestingGround</Filter>
 		</ClInclude >
 		<Filter Include="Source\TestingGround\Private">
-			<UniqueIdentifier>{7AA2BB47-F7B7-4C18-80DB-1A32F00BB079}</UniqueIdentifier>
+			<UniqueIdentifier>{8E7A6707-62A3-40C1-94A4-50F76827F967}</UniqueIdentifier>
 		</Filter>
 		<ClCompile Include="..\..\Source\TestingGround\Private\AmmoPickup.cpp">
 			<Filter>Source\TestingGround\Private</Filter>
@@ -61,7 +61,7 @@
 			<Filter>Source\TestingGround\Private</Filter>
 		</ClCompile >
 		<Filter Include="Source\TestingGround\Public">
-			<UniqueIdentifier>{BDF429D5-A945-4708-B42F-D6F0870E8DAA}</UniqueIdentifier>
+			<UniqueIdentifier>{F85C1F17-24C0-4F35-B684-1D2862576B70}</UniqueIdentifier>
 		</Filter>
 		<ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h">
 			<Filter>Source\TestingGround\Public</Filter>
@@ -85,10 +85,10 @@
 			<Filter>Source\TestingGround\Public</Filter>
 		</ClInclude >
 		<Filter Include="Source\TestingGround\Resources">
-			<UniqueIdentifier>{97417C36-7EE7-47CA-8976-13F5ADE52E46}</UniqueIdentifier>
+			<UniqueIdentifier>{409BBD47-F627-4F88-BA7A-2F9984B5C6B4}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="Source\TestingGround\Resources\Windows">
-			<UniqueIdentifier>{9867937C-47D6-4FE8-9168-3D0CB67F1862}</UniqueIdentifier>
+			<UniqueIdentifier>{802E5BA5-F818-40A0-AF36-D794CDECDA24}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.ico">
 			<Filter>Source\TestingGround\Resources\Windows</Filter>

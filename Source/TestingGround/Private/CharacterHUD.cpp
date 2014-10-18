@@ -73,6 +73,7 @@ void ACharacterHUD::DrawCrosshair()
 			Center.Y - (CrosshairTexture->GetSurfaceHeight() / 2.0f));
 
 		FCanvasTileItem CrosshairTile(CrosshairPosition, CrosshairTexture->Resource, FLinearColor::White);
+		CrosshairTile.BlendMode = SE_BLEND_Translucent;
 
 		Canvas->DrawItem(CrosshairTile);
 	}

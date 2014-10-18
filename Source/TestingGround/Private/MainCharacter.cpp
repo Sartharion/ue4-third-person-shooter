@@ -55,6 +55,7 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->CameraTransitionSmoothSpeed = 15.0f; // The smooth speed at which the camera transitions between 2 points in space (A multipllier for DeltaTime)
 	this->AmmoCapacity = 300;
 	this->ClipCapacity = 30;
+	this->HealthCapacity = 1000.0f;
 
 	// Note: The skeletal mesh and animation blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named BP_MainCharacter (to avoid direct content references in C++)
@@ -73,6 +74,7 @@ void AMainCharacter::BeginPlay()
 
 	this->Ammo = this->AmmoCapacity - this->ClipCapacity;
 	this->AmmoInClip = this->ClipCapacity;
+	this->Health = this->HealthCapacity;
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -156,6 +158,7 @@ void AMainCharacter::AimStart()
 
 void AMainCharacter::AimStop()
 {
+	this->bIsFiring = false;
 	this->bIsAiming = false;
 	
 	this->bUseControllerRotationYaw = false; // While the character is not aiming he must not use the controller's yaw rotation
@@ -174,7 +177,7 @@ void AMainCharacter::AimStop()
 
 void AMainCharacter::FireStart()
 {
-	if (!this->bIsReloading)
+	if (!this->bIsReloading && this->bIsAiming)
 	{
 		this->bIsFiring = true;
 		this->OnFire();
@@ -278,6 +281,11 @@ int32 AMainCharacter::PickUpAmmo(int32 Ammo)
 	}
 
 	return PickedUpAmount;
+}
+
+void AMainCharacter::TakeDamage(float Damage)
+{
+	this->Health -= Damage;
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)

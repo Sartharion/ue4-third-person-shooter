@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "IDamageable.h"
 #include "BallProjectile.h"
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
@@ -10,7 +11,7 @@
  * 
  */
 UCLASS()
-class TESTINGGROUND_API AMainCharacter : public ACharacter
+class TESTINGGROUND_API AMainCharacter : public ACharacter, public IDamageable
 {
 	GENERATED_UCLASS_BODY()
 
@@ -74,6 +75,14 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<ABallProjectile> ProjectileClass;
 
+	/** The current health that the character has left */
+	UPROPERTY(BlueprintReadOnly, Category = "Character | Gameplay")
+	float Health;
+
+	/** The maximum health of the character that he can have left */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Gameplay")
+	float HealthCapacity;
+
 	/** How many projectiles the character can fire each second */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
 	int32 ShotsPerSecond;
@@ -101,9 +110,17 @@ class TESTINGGROUND_API AMainCharacter : public ACharacter
 	/**
 	 * The character picks up a specified amount of ammo
 	 * Returns the amount of ammo that the character picked up (He may not pick all of the ammo if he reaches the AmmoCapacity)
+	 * @param AmmoAmount - The amount of ammo that the character picks up
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
 	int32 PickUpAmmo(int32 AmmoAmount);
+
+	/**
+	 * The character takes damage.
+	 * @param Damage - The amount of damage that the character gets
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character Action")
+	virtual void TakeDamage(float Damage) override;
 
 	virtual void BeginPlay() override;
 

@@ -26,16 +26,32 @@ void ACharacterHUD::DrawHUD()
 
 	if (this->Character != NULL)
 	{
-		// Draw the remaining ammo
-		FVector2D AmmoPosition = FVector2D(Canvas->ClipX - Canvas->ClipX / 6.0f, Canvas->ClipY - Canvas->ClipY / 7.0f);
-		FText Ammo = FText::FromString(FString(TEXT("Ammo: ") + FString::FromInt(this->Character->Ammo)));
-		FCanvasTextItem AmmoTextItem(AmmoPosition, Ammo, this->Font, FLinearColor::White);
-		Canvas->DrawItem(AmmoTextItem);
-
-		// Draw the remaining ammo in the clip of the gun
-		FVector2D ClipPosition = FVector2D(Canvas->ClipX - Canvas->ClipX / 6.0f, Canvas->ClipY - Canvas->ClipY / 10.0f);
-		FText Clip = FText::FromString(FString(TEXT("Clip: ") + FString::FromInt(this->Character->AmmoInClip)));
-		FCanvasTextItem ClipTextItem(ClipPosition, Clip, this->Font, FLinearColor::White);
-		Canvas->DrawItem(ClipTextItem);
+		this->DrawHealthBarHUD();
+		this->DrawAmmoHUD();
 	}
 }
+
+void ACharacterHUD::DrawAmmoHUD()
+{
+	// Draw the remaining ammo
+	FVector2D AmmoPosition = FVector2D(Canvas->ClipX - Canvas->ClipX / 9.0f, Canvas->ClipY - Canvas->ClipY / 7.0f);
+	FText AmmoText = FText::FromString(FString::Printf(TEXT("Ammo: %d"), this->Character->Ammo));
+	FCanvasTextItem AmmoTextItem(AmmoPosition, AmmoText, this->Font, FLinearColor::White);
+	Canvas->DrawItem(AmmoTextItem);
+
+	// Draw the remaining ammo in the clip of the gun
+	FVector2D ClipPosition = FVector2D(Canvas->ClipX - Canvas->ClipX / 9.0f, Canvas->ClipY - Canvas->ClipY / 10.0f);
+	FText ClipText = FText::FromString(FString::Printf(TEXT("Clip: %d"), this->Character->AmmoInClip));
+	FCanvasTextItem ClipTextItem(ClipPosition, ClipText, this->Font, FLinearColor::White);
+	Canvas->DrawItem(ClipTextItem);
+}
+
+void ACharacterHUD::DrawHealthBarHUD()
+{
+	// Draw the health bar of the character
+	FVector2D HealthBarPosition = FVector2D(25.0f, Canvas->ClipY - Canvas->ClipY / 10.0f);
+	FText HealthBarText = FText::FromString(FString::Printf(TEXT("Health: %.0f/%.0f"), Character->Health, Character->HealthCapacity));
+	FCanvasTextItem HealthBarTextItem(HealthBarPosition, HealthBarText, this->Font, FLinearColor::White);
+	Canvas->DrawItem(HealthBarTextItem);
+}
+

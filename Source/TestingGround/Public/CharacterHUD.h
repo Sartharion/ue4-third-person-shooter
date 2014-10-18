@@ -23,4 +23,8 @@ class TESTINGGROUND_API ACharacterHUD : public AHUD
 
 private:
 	AMainCharacter* Character;
+
+	void DrawAmmoHUD();
+
+	void DrawHealthBarHUD();
 };

@@ -42,10 +42,10 @@ void UMainCharacterAnimInstance::BlueprintUpdateAnimation(float DeltaTimeX)
 		this->bIsReloading = this->Character->bIsReloading;
 
 		// Debug messages
-		GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, FString(TEXT("")));
-		GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Green, FString(TEXT("")));
-		//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, FString(TEXT("Speed: ")) + FString::SanitizeFloat(this->Speed));
-		//GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Green, FString(TEXT("Direction: ")) + FString::SanitizeFloat(this->Direction));
+		//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, FString(TEXT("")));
+		//GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Green, FString(TEXT("")));
+		GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, FString(TEXT("Speed: ")) + FString::SanitizeFloat(this->Speed));
+		GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Green, FString(TEXT("Direction: ")) + FString::SanitizeFloat(this->Direction));
 		GEngine->AddOnScreenDebugMessage(2, 1.0f, FColor::Blue, this->bIsAiming ? FString(TEXT("IsAiming: True")) : FString(TEXT("IsAiming: False")));
 		GEngine->AddOnScreenDebugMessage(3, 1.0f, FColor::Yellow, this->bIsFiring ? FString(TEXT("IsFiring: True")) : FString(TEXT("IsFiring: False")));
 		GEngine->AddOnScreenDebugMessage(4, 1.0f, FColor::Magenta, this->Character->bIsSprinting ? FString(TEXT("IsSprinting: True")) : FString(TEXT("IsSprinting: False")));

@@ -106,7 +106,7 @@ void AMainCharacter::MoveForward(float AxisValue)
 	if (this->Controller != NULL && AxisValue != 0.0f)
 	{
 		FRotator ControllerRotation = this->FollowCamera->GetComponentRotation();
-		FRotator YawRotation = FRotator(0.0f, ControllerRotation.Yaw, 0.0f); // We need only the Yaw Rotation of the controller
+		FRotator YawRotation(0.0f, ControllerRotation.Yaw, 0.0f); // We need only the Yaw Rotation of the controller
 
 		// Find the forward vector relative to the controller's yaw rotation
 		FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -119,7 +119,7 @@ void AMainCharacter::MoveRight(float AxisValue)
 	if (this->Controller != NULL && AxisValue != 0.0f)
 	{
 		FRotator ControllerRotation = this->FollowCamera->GetComponentRotation();
-		FRotator YawRotation = FRotator(0.0f, ControllerRotation.Yaw, 0.0f); // We need only the Yaw Rotation of the controller
+		FRotator YawRotation(0.0f, ControllerRotation.Yaw, 0.0f); // We need only the Yaw Rotation of the controller
 
 		// Find the right vector relative to the controller's yaw rotation
 		FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);

@@ -14,8 +14,13 @@ class TESTINGGROUND_API ACharacterHUD : public AHUD
 {
 	GENERATED_UCLASS_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = "Font")
+	/** The font use for the text */
+	UPROPERTY(EditDefaultsOnly, Category = "Text")
 	UFont* Font;
+
+	/** The texture for the crosshair */
+	UPROPERTY(EditDefaultsOnly, Category = "Crosshair")
+	UTexture2D* CrosshairTexture;
 
 	virtual void DrawHUD() override;
 
@@ -27,4 +32,6 @@ private:
 	void DrawAmmoHUD();
 
 	void DrawHealthBarHUD();
+
+	void DrawCrosshair();
 };

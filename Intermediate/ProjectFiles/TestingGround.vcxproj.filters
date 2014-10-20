@@ -1,104 +1,115 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <None Include="..\..\TestingGround.uproject" />
-    <Filter Include="Source">
-      <UniqueIdentifier>{76790A3C-DA6D-4468-9FF7-B8DA5EE87F55}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Source\TestingGround.Target.cs">
-      <Filter>Source</Filter>
-    </None>
-    <None Include="..\..\Source\TestingGroundEditor.Target.cs">
-      <Filter>Source</Filter>
-    </None>
-    <Filter Include="Config">
-      <UniqueIdentifier>{650DFFB8-360E-4E6E-98C2-323F6E94B8E4}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Config\DefaultEngine.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultGame.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultInput.ini">
-      <Filter>Config</Filter>
-    </None>
-    <Filter Include="Source\TestingGround">
-      <UniqueIdentifier>{BA70B0CF-4D46-452A-88AB-F4056546C26E}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Source\TestingGround\TestingGround.Build.cs">
-      <Filter>Source\TestingGround</Filter>
-    </None>
-    <ClCompile Include="..\..\Source\TestingGround\TestingGround.cpp">
-      <Filter>Source\TestingGround</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\TestingGround\TestingGround.h">
-      <Filter>Source\TestingGround</Filter>
-    </ClInclude>
-    <Filter Include="Source\TestingGround\Private">
-      <UniqueIdentifier>{8E7A6707-62A3-40C1-94A4-50F76827F967}</UniqueIdentifier>
-    </Filter>
-    <ClCompile Include="..\..\Source\TestingGround\Private\AmmoPickup.cpp">
-      <Filter>Source\TestingGround\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TestingGround\Private\BallProjectile.cpp">
-      <Filter>Source\TestingGround\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TestingGround\Private\CharacterHUD.cpp">
-      <Filter>Source\TestingGround\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TestingGround\Private\MainCharacter.cpp">
-      <Filter>Source\TestingGround\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TestingGround\Private\MainCharacterAnimInstance.cpp">
-      <Filter>Source\TestingGround\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TestingGround\Private\Pickup.cpp">
-      <Filter>Source\TestingGround\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TestingGround\Private\SlidingDoor.cpp">
-      <Filter>Source\TestingGround\Private</Filter>
-    </ClCompile>
-    <Filter Include="Source\TestingGround\Public">
-      <UniqueIdentifier>{F85C1F17-24C0-4F35-B684-1D2862576B70}</UniqueIdentifier>
-    </Filter>
-    <ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\BallProjectile.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\CharacterHUD.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\MainCharacterAnimInstance.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\Pickup.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\SlidingDoor.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-    <Filter Include="Source\TestingGround\Resources">
-      <UniqueIdentifier>{409BBD47-F627-4F88-BA7A-2F9984B5C6B4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\TestingGround\Resources\Windows">
-      <UniqueIdentifier>{802E5BA5-F818-40A0-AF36-D794CDECDA24}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.ico">
-      <Filter>Source\TestingGround\Resources\Windows</Filter>
-    </None>
-    <ResourceCompile Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.rc">
-      <Filter>Source\TestingGround\Resources\Windows</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\TestingGround\Public\IDamageable.h">
-      <Filter>Source\TestingGround\Public</Filter>
-    </ClInclude>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\TestingGround.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{61B52422-C22F-4047-8782-C59C46EF01AC}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\TestingGround.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\TestingGroundEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{AFC9D3DF-97B1-4A07-B90E-63F7364F21F4}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultInput.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\TestingGround">
+			<UniqueIdentifier>{CDF071A0-69C8-48E3-B625-6AF85E933FBB}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\TestingGround\TestingGround.Build.cs">
+			<Filter>Source\TestingGround</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\TestingGround\TestingGround.cpp">
+			<Filter>Source\TestingGround</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\TestingGround\TestingGround.h">
+			<Filter>Source\TestingGround</Filter>
+		</ClInclude >
+		<Filter Include="Source\TestingGround\Private">
+			<UniqueIdentifier>{96DC4879-27AA-4CF8-B425-688ECF36E32E}</UniqueIdentifier>
+		</Filter>
+		<ClCompile Include="..\..\Source\TestingGround\Private\AmmoPickup.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\BallProjectile.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterAnimInstanceBase.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterBase.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterHUD.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacter.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacterAnimInstance.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\Pickup.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\SlidingDoor.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
+		<Filter Include="Source\TestingGround\Public">
+			<UniqueIdentifier>{5A2599AF-6819-46D8-865B-775628E98716}</UniqueIdentifier>
+		</Filter>
+		<ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\BallProjectile.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterAnimInstanceBase.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterBase.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterHUD.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\IDamageable.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacterAnimInstance.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\Pickup.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\SlidingDoor.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
+		<Filter Include="Source\TestingGround\Resources">
+			<UniqueIdentifier>{316A6BF7-2309-422F-87AD-71003EEE5468}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Source\TestingGround\Resources\Windows">
+			<UniqueIdentifier>{87952E5B-3D03-4F45-9CF9-47A5E5DCDC04}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.ico">
+			<Filter>Source\TestingGround\Resources\Windows</Filter>
+		</None >
+		<ResourceCompile Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.rc">
+			<Filter>Source\TestingGround\Resources\Windows</Filter>
+		</ResourceCompile >
+	</ItemGroup>
 </Project>

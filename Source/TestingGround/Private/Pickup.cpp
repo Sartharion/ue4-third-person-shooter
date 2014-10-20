@@ -43,5 +43,6 @@ void APickup::ReceiveActorBeginOverlap(AActor* OtherActor)
 
 void APickup::OnPickedUp(APawn* Picker)
 {
+
 }
 

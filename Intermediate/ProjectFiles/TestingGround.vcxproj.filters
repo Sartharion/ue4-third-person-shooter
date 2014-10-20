@@ -4,7 +4,7 @@
 	<ItemGroup>
 		<None Include="..\..\TestingGround.uproject" />
 		<Filter Include="Source">
-			<UniqueIdentifier>{61B52422-C22F-4047-8782-C59C46EF01AC}</UniqueIdentifier>
+			<UniqueIdentifier>{893EF7A8-A34B-42BE-BA50-6C30F0EB6A32}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround.Target.cs">
 			<Filter>Source</Filter>
@@ -13,7 +13,7 @@
 			<Filter>Source</Filter>
 		</None >
 		<Filter Include="Config">
-			<UniqueIdentifier>{AFC9D3DF-97B1-4A07-B90E-63F7364F21F4}</UniqueIdentifier>
+			<UniqueIdentifier>{28926326-3EB2-48F9-864A-074E3AF9C232}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Config\DefaultEngine.ini">
 			<Filter>Config</Filter>
@@ -25,7 +25,7 @@
 			<Filter>Config</Filter>
 		</None >
 		<Filter Include="Source\TestingGround">
-			<UniqueIdentifier>{CDF071A0-69C8-48E3-B625-6AF85E933FBB}</UniqueIdentifier>
+			<UniqueIdentifier>{D3AEF7A8-128C-43BF-B91B-1DF3DA7ED48E}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround\TestingGround.Build.cs">
 			<Filter>Source\TestingGround</Filter>
@@ -37,7 +37,7 @@
 			<Filter>Source\TestingGround</Filter>
 		</ClInclude >
 		<Filter Include="Source\TestingGround\Private">
-			<UniqueIdentifier>{96DC4879-27AA-4CF8-B425-688ECF36E32E}</UniqueIdentifier>
+			<UniqueIdentifier>{605B5FFB-184B-428B-8064-9C8B9458CE5A}</UniqueIdentifier>
 		</Filter>
 		<ClCompile Include="..\..\Source\TestingGround\Private\AmmoPickup.cpp">
 			<Filter>Source\TestingGround\Private</Filter>
@@ -63,11 +63,14 @@
 		<ClCompile Include="..\..\Source\TestingGround\Private\Pickup.cpp">
 			<Filter>Source\TestingGround\Private</Filter>
 		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\ProjectileBase.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
 		<ClCompile Include="..\..\Source\TestingGround\Private\SlidingDoor.cpp">
 			<Filter>Source\TestingGround\Private</Filter>
 		</ClCompile >
 		<Filter Include="Source\TestingGround\Public">
-			<UniqueIdentifier>{5A2599AF-6819-46D8-865B-775628E98716}</UniqueIdentifier>
+			<UniqueIdentifier>{CD220C9E-90E2-472B-871E-A61639637020}</UniqueIdentifier>
 		</Filter>
 		<ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h">
 			<Filter>Source\TestingGround\Public</Filter>
@@ -96,14 +99,17 @@
 		<ClInclude Include="..\..\Source\TestingGround\Public\Pickup.h">
 			<Filter>Source\TestingGround\Public</Filter>
 		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\ProjectileBase.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
 		<ClInclude Include="..\..\Source\TestingGround\Public\SlidingDoor.h">
 			<Filter>Source\TestingGround\Public</Filter>
 		</ClInclude >
 		<Filter Include="Source\TestingGround\Resources">
-			<UniqueIdentifier>{316A6BF7-2309-422F-87AD-71003EEE5468}</UniqueIdentifier>
+			<UniqueIdentifier>{B0AE79D3-12B0-4130-9F52-38108B9F1433}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="Source\TestingGround\Resources\Windows">
-			<UniqueIdentifier>{87952E5B-3D03-4F45-9CF9-47A5E5DCDC04}</UniqueIdentifier>
+			<UniqueIdentifier>{7E7DB1B2-8735-473D-A66E-E2059E87359F}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.ico">
 			<Filter>Source\TestingGround\Resources\Windows</Filter>

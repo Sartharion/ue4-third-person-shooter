@@ -29,7 +29,7 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->CharacterMovement->AirControl = 0.2f; // 20% of the total control
 
 	// Set up the gameplay parameters
-	this->GunOffset = FVector(150.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
+	this->GunOffset = FVector(100.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
 	this->ShotsPerSecond = 10; // How many projectiles the character can fire each second
 	this->AmmoCapacity = 300;
 	this->ClipCapacity = 30;

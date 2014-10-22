@@ -54,6 +54,62 @@ void AMainCharacter::Tick(float DeltaTime)
 	}
 }
 
+void AMainCharacter::OnFire()
+{
+	// Try and fire a projectile
+	if (this->ProjectileClass != NULL &&
+		this->bIsAiming &&
+		!this->bIsReloading &&
+		this->AmmoInClip > 0)
+	{
+		UWorld* World = this->GetWorld();
+		if (World != NULL)
+		{
+			const FRotator CameraRotation = this->FollowCamera->GetComponentRotation();
+			const FVector CameraLocation = this->FollowCamera->GetComponentLocation();
+			const FVector ForwardVector = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X);
+
+			const FVector RayStart = CameraLocation;
+			const FVector RayEnd = ForwardVector * 100000;
+			FCollisionQueryParams QueryParams(FName(TEXT("ProjectileTrace")), false, this);
+			FCollisionObjectQueryParams ObjectQueryParams(ECollisionChannel::ECC_WorldStatic);
+			ObjectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+			ObjectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_PhysicsBody);
+			ObjectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+
+			//DrawDebugLine(World, RayStart, RayEnd, FColor::Red, false, 5.0f, 0, 2.0f);
+
+			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+			const FVector SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(GunOffset);
+
+			FVector ProjectileDirection; // The direction of the projectile
+			FHitResult HitResult;
+			if (World->LineTraceSingle(HitResult, RayStart, RayEnd, QueryParams, ObjectQueryParams))
+			{
+				ProjectileDirection = HitResult.Location - SpawnLocation;
+				DrawDebugLine(World, SpawnLocation, HitResult.Location, FColor::Green, false, 5.0f, 2.0f);
+
+				AActor* HitActor = HitResult.Actor.Get();
+				if (HitActor != NULL)
+				{
+					GEngine->AddOnScreenDebugMessage(10, 2.0f, FColor::White, HitActor->GetName());
+				}
+			}
+			else
+			{
+				ProjectileDirection = RayEnd - SpawnLocation;
+				//DrawDebugLine(World, SpawnLocation, RayEnd, FColor::Blue, false, 5.0f, 2.0f);
+			}
+
+			const FRotator SpawnRotation = FRotationMatrix::MakeFromX(ProjectileDirection).Rotator();
+
+			World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+
+			this->AmmoInClip--;
+		}
+	}
+}
+
 int32 AMainCharacter::PickUpAmmo(int32 Ammo)
 {
 	int32 PickedUpAmount = Ammo;

@@ -16,7 +16,7 @@ ASlidingDoor::ASlidingDoor(const class FPostConstructInitializeProperties& PCIP)
 	this->DoorMesh->bAbsoluteScale = true;
 
 	this->SlideSpeed = 4.0f;
-	this->SlideVector = FVector(180.0f, 0.0f, 0.0f);
+	this->SlideVector = FVector(0.0f, 0.0f, 0.0f);
 	this->SlidingDoorCloseDelay = 2.0f;
 	this->bInitializedDoor = false;
 	this->bDoorMustOpen = false;

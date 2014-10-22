@@ -52,6 +52,8 @@ class TESTINGGROUND_API AMainCharacter : public ACharacterBase
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	virtual void OnFire() override;
+
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn unterface

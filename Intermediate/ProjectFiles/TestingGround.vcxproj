@@ -58,6 +58,7 @@
 		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterAnimInstanceBase.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterBase.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterHUD.cpp" />
+		<ClCompile Include="..\..\Source\TestingGround\Private\Enemy.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacter.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacterAnimInstance.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\Pickup.cpp" />
@@ -68,6 +69,7 @@
 		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterAnimInstanceBase.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterBase.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterHUD.h" />
+		<ClInclude Include="..\..\Source\TestingGround\Public\Enemy.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\IDamageable.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacterAnimInstance.h" />

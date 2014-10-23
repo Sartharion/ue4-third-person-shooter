@@ -82,7 +82,7 @@ void AMainCharacter::OnFire()
 			const FVector ForwardVector = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X);
 
 			const FVector RayStart = CameraLocation;
-			const FVector RayEnd = ForwardVector * 100000;
+			const FVector RayEnd = RayStart + (ForwardVector * 10000);
 			FCollisionQueryParams QueryParams(FName(TEXT("ProjectileTrace")), false, this);
 			FCollisionObjectQueryParams ObjectQueryParams(ECollisionChannel::ECC_WorldStatic);
 			ObjectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);

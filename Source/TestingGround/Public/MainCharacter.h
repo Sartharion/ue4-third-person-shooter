@@ -58,10 +58,16 @@ class TESTINGGROUND_API AMainCharacter : public ACharacterBase
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	/** Turns the character left or right (-1 -> left, 1 -> right) */
+	/**
+	 * Turns the character left or right
+	 * @param AxisValue - value in range [-1.0, 1.0], (-1 -> TurnLeft, 1 -> TurnRight)
+	 */
 	virtual void Turn(float AxisValue);
 
-	/** The character looks up or down (-1 -> up, 1 -> down) */
+	/**
+	 * The character looks up or down
+	 * @param AxisValue - value in range [-1.0, 1.0], (-1 -> LookUp, 1 -> LookDown)
+	 */
 	virtual void LookUp(float AxisValus);
 
 	/** Fires a projectile towards the crosshair  */

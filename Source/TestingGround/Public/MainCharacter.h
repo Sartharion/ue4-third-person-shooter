@@ -39,6 +39,12 @@ class TESTINGGROUND_API AMainCharacter : public ACharacterBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	float CameraTransitionSmoothSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float MouseXSensitivity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float MouseYSensitivity;
+
 	/**
 	 * The character picks up a specified amount of ammo
 	 * Returns the amount of ammo that the character picked up (He may not pick all of the ammo if he reaches the AmmoCapacity)
@@ -52,6 +58,13 @@ class TESTINGGROUND_API AMainCharacter : public ACharacterBase
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	/** Turns the character left or right (-1 -> left, 1 -> right) */
+	virtual void Turn(float AxisValue);
+
+	/** The character looks up or down (-1 -> up, 1 -> down) */
+	virtual void LookUp(float AxisValus);
+
+	/** Fires a projectile towards the crosshair  */
 	virtual void OnFire() override;
 
 	// APawn interface

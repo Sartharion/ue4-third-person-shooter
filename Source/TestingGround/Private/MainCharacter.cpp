@@ -26,10 +26,12 @@ AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& P
 	this->FollowCamera->bUsePawnControlRotation = false; // Already uses pawn control rotation, because is attached to the CameraBoom
 	this->FollowCamera->SetWorldRotation(FRotator::ZeroRotator);
 
-	// Set up the gameplay parameters
+	// Camera settings
 	this->CameraBoomLengthWhileAiming = 100.0f; // The camera is this distance behind the target
 	this->CameraBoomExtensionLengthWhileAiming = 50.0f; // The camera is distance right of the target
 	this->CameraTransitionSmoothSpeed = 15.0f; // The smooth speed at which the camera transitions between 2 points in space (A multipllier for DeltaTime)
+	this->MouseXSensitivity = 1.0f;
+	this->MouseYSensitivity = 1.0f;
 }
 
 void AMainCharacter::BeginPlay()
@@ -52,6 +54,16 @@ void AMainCharacter::Tick(float DeltaTime)
 	{
 		this->MoveCameraAwayFromCharacter(this->CameraTransitionSmoothSpeed, DeltaTime);
 	}
+}
+
+void AMainCharacter::Turn(float AxisValue)
+{
+	this->AddControllerYawInput(AxisValue * this->MouseXSensitivity);
+}
+
+void AMainCharacter::LookUp(float AxisValue)
+{
+	this->AddControllerPitchInput(AxisValue * this->MouseYSensitivity);
 }
 
 void AMainCharacter::OnFire()
@@ -132,8 +144,10 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 	{
 		InputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
 		InputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
-		InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-		InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+		InputComponent->BindAxis("Turn", this, &AMainCharacter::Turn);
+		InputComponent->BindAxis("LookUp", this, &AMainCharacter::LookUp);
+		//InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+		//InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 		InputComponent->BindAction("Sprint", IE_Pressed, this, &AMainCharacter::SprintStart);
 		InputComponent->BindAction("Sprint", IE_Released, this, &AMainCharacter::SprintStop);

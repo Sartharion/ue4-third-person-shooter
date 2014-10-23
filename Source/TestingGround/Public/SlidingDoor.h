@@ -25,7 +25,7 @@ class TESTINGGROUND_API ASlidingDoor : public AActor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sliding Door")
 	float SlideSpeed;
 
-	/** The vector on which the door will slide */
+	/** The vector on which the door will slide (In World Space) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sliding Door")
 	FVector SlideVector;
 

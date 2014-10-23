@@ -14,23 +14,23 @@ class TESTINGGROUND_API ASlidingDoor : public AActor
 	GENERATED_UCLASS_BODY()
 
 	/** The root component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 	TSubobjectPtr<UBoxComponent> TriggerVolume;
 
 	/** The static mesh for the door */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sliding Door")
 	TSubobjectPtr<UStaticMeshComponent> DoorMesh;
 
 	/** The speed at which the door slides. A multiplier for the DeltaTime */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slide Properties")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sliding Door")
 	float SlideSpeed;
 
 	/** The vector on which the door will slide */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slide Properties")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sliding Door")
 	FVector SlideVector;
 
 	/** A Delay before closing the door in seconds */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slide Properties")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sliding Door")
 	float SlidingDoorCloseDelay;
 
 	virtual void Tick(float DeltaTime) override;

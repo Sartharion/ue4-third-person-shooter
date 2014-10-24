@@ -11,6 +11,7 @@ AEnemyAIController::AEnemyAIController(const class FPostConstructInitializePrope
 	this->FieldOfView = 150.0f; // The FOV of the enemy character is degrees
 	this->TargetToFollow = NULL;
 	this->TargetLocation = FVector::ZeroVector;
+	this->bShouldMoveToHomeLocation = true;
 }
 
 void AEnemyAIController::BeginPlay()
@@ -36,14 +37,13 @@ void AEnemyAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//GEngine->AddOnScreenDebugMessage(22, 1.0f, FColor::Magenta, FString(TEXT("TargetLocation: ") + this->TargetLocation.ToString()));
-
 	if (this->TargetToFollow != NULL)
 	{
 		this->TargetLocation = this->TargetToFollow->GetActorLocation();
 		if (this->IsTargetToFollowInLineOfSight())
 		{
-			this->MoveToLocation(this->TargetLocation, 50.0f);
+			this->bShouldMoveToHomeLocation = false;
+			this->MoveToLocation(this->TargetLocation, 100.0f);
 
 			/*if (!this->ControlledCharacter->bIsFiring)
 			{
@@ -51,12 +51,10 @@ void AEnemyAIController::Tick(float DeltaTime)
 				this->ControlledCharacter->FireStart();
 			}*/
 		}
-
-		//GEngine->AddOnScreenDebugMessage(20, 1.0f, FColor::Magenta, FString::Printf(TEXT("IsTargetInLineOfSight: %d"), this->IsTargetToFollowInLineOfSight()));
 	}
 	else
 	{
-		this->MoveToLocation(this->HomeLocation);
+		this->MoveToLocation(this->HomeLocation, 10.0f);
 	}
 }
 
@@ -88,7 +86,7 @@ bool AEnemyAIController::IsTargetToFollowInLineOfSight() const
 					DirectionToTarget.Normalize();
 
 					float AngleBetween = FMath::Acos(FVector::DotProduct(EnemyForwardVector, DirectionToTarget));
-					AngleBetween = FMath::ClampAngle(FMath::RadiansToDegrees(AngleBetween), 0.0f, 180.0f);
+					AngleBetween = FMath::RadiansToDegrees(AngleBetween);
 
 					if (AngleBetween <= this->FieldOfView * 0.5f)
 					{
@@ -119,8 +117,6 @@ FVector AEnemyAIController::GetHomeLocation() const
 
 void AEnemyAIController::OnAggroTriggerBeginOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//GEngine->AddOnScreenDebugMessage(20, 2.0f, FColor::Green, FString(TEXT("AggroTrigger::BeginOverlap")));
-
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if (MainCharacter != NULL)
 	{
@@ -130,8 +126,6 @@ void AEnemyAIController::OnAggroTriggerBeginOverlap(class AActor* OtherActor, cl
 
 void AEnemyAIController::OnAggroTriggerEndOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	//GEngine->AddOnScreenDebugMessage(21, 2.0f, FColor::Red, FString(TEXT("AggroTrigger::EndOverlap")));
-
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if (MainCharacter != NULL)
 	{

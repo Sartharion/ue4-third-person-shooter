@@ -46,6 +46,9 @@ protected:
 	/** The location to where the enemy will go when the target to follow is lost */
 	FVector HomeLocation;
 
+	/** Indicates if the enemy character should to it's HomeLocation */
+	bool bShouldMoveToHomeLocation;
+
 	/** The current target to follow */
 	AActor* TargetToFollow;
 

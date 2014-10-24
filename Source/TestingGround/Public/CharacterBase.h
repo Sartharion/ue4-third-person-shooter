@@ -94,7 +94,6 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 
 	virtual void Tick(float DeltaTime) override;
 
-protected:
 	/** Used for moving forward and backward */
 	virtual void MoveForward(float AxisValue);
 

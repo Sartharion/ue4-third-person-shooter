@@ -116,20 +116,6 @@ void AMainCharacter::OnFire()
 	}
 }
 
-int32 AMainCharacter::PickUpAmmo(int32 Ammo)
-{
-	int32 PickedUpAmount = Ammo;
-
-	this->Ammo += Ammo;
-	if (this->Ammo > this->AmmoCapacity)
-	{
-		PickedUpAmount = Ammo - (this->Ammo - this->AmmoCapacity);
-		this->Ammo = this->AmmoCapacity;
-	}
-
-	return PickedUpAmount;
-}
-
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);

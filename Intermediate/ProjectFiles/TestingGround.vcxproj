@@ -60,6 +60,7 @@
 		<ClCompile Include="..\..\Source\TestingGround\Private\CharacterHUD.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\EnemyAIController.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\EnemyCharacter.cpp" />
+		<ClCompile Include="..\..\Source\TestingGround\Private\HealthPickup.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacter.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacterAnimInstance.cpp" />
 		<ClCompile Include="..\..\Source\TestingGround\Private\Pickup.cpp" />
@@ -72,6 +73,7 @@
 		<ClInclude Include="..\..\Source\TestingGround\Public\CharacterHUD.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\EnemyAIController.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\EnemyCharacter.h" />
+		<ClInclude Include="..\..\Source\TestingGround\Public\HealthPickup.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\IDamageable.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h" />
 		<ClInclude Include="..\..\Source\TestingGround\Public\MainCharacterAnimInstance.h" />

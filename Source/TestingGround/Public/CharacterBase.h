@@ -86,6 +86,22 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	/** Reloads the clip of the character */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
 	void Reload();
+	
+	/**
+	 * The character picks up a specified amount of ammo.
+	 * @param AmmoAmount - The amount of ammo that the character picks up
+	 * @return the amount of ammo that the character picked up (He may not pick all of the ammo if he reaches the AmmoCapacity)
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character Action")
+	int32 PickUpAmmo(int32 AmmoAmount);
+
+	/**
+	 * The character gains a specified amount of health.
+	 * @param HealthAmount - The amount of health that the character gains
+	 * @return the amount of health that the character gained (He may not gain all of the health if he reaches the HealthCapacity)
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character Action")
+	float GainHealth(float HealthAmount);
 
 	/**
 	 * The character takes damage.

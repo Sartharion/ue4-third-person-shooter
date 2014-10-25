@@ -76,6 +76,11 @@ void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 {
 	if (bIsTargetInLineOfSight && !Target->bIsDead)
 	{
+		if (!this->ControlledCharacter->bIsSprinting)
+		{
+			this->ControlledCharacter->SprintStart();
+		}
+
 		this->bShouldMoveToHomeLocation = false;
 		this->TargetLocation = Target->GetActorLocation();
 		this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
@@ -84,6 +89,11 @@ void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 	{
 		if (this->bShouldMoveToHomeLocation || Target->bIsDead)
 		{
+			if (this->ControlledCharacter->bIsSprinting)
+			{
+				this->ControlledCharacter->SprintStop();
+			}
+
 			this->MoveToLocation(this->HomeLocation);
 		}
 		else

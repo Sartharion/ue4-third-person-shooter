@@ -237,6 +237,34 @@ void ACharacterBase::Reload()
 	this->ReloadStop();
 }
 
+int32 ACharacterBase::PickUpAmmo(int32 Ammo)
+{
+	int32 PickedUpAmount = Ammo;
+
+	this->Ammo += Ammo;
+	if (this->Ammo > this->AmmoCapacity)
+	{
+		PickedUpAmount = Ammo - (this->Ammo - this->AmmoCapacity);
+		this->Ammo = this->AmmoCapacity;
+	}
+
+	return PickedUpAmount;
+}
+
+float ACharacterBase::GainHealth(float Health)
+{
+	float GainedHealthAmount = Health;
+
+	this->Health += Health;
+	if (this->Health > this->HealthCapacity)
+	{
+		GainedHealthAmount = Health - (this->Health - this->HealthCapacity);
+		this->Health = this->HealthCapacity;
+	}
+
+	return GainedHealthAmount;
+}
+
 void ACharacterBase::TakeDamage(float Damage)
 {
 	this->Health -= Damage;
@@ -246,6 +274,7 @@ void ACharacterBase::TakeDamage(float Damage)
 		this->bIsDead = true;
 		this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 		this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Ignore);
+		this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	}
 }
 

@@ -4,7 +4,7 @@
 	<ItemGroup>
 		<None Include="..\..\TestingGround.uproject" />
 		<Filter Include="Source">
-			<UniqueIdentifier>{89F71BA5-390D-417B-BCF3-AB7363DC60D4}</UniqueIdentifier>
+			<UniqueIdentifier>{05D585CF-5A18-4907-9857-1BB57398FE50}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround.Target.cs">
 			<Filter>Source</Filter>
@@ -13,7 +13,7 @@
 			<Filter>Source</Filter>
 		</None >
 		<Filter Include="Config">
-			<UniqueIdentifier>{13FD4735-4B36-48AB-BCAA-4BAE35510240}</UniqueIdentifier>
+			<UniqueIdentifier>{BB8137B7-3C4C-4382-9E32-389935E820E1}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Config\DefaultEngine.ini">
 			<Filter>Config</Filter>
@@ -25,7 +25,7 @@
 			<Filter>Config</Filter>
 		</None >
 		<Filter Include="Source\TestingGround">
-			<UniqueIdentifier>{3A8AAA9B-B7FB-49AE-BF66-F95BDD5A47B5}</UniqueIdentifier>
+			<UniqueIdentifier>{8335B388-7DBE-4379-B01A-1BE5DA5E3A87}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround\TestingGround.Build.cs">
 			<Filter>Source\TestingGround</Filter>
@@ -37,7 +37,7 @@
 			<Filter>Source\TestingGround</Filter>
 		</ClInclude >
 		<Filter Include="Source\TestingGround\Private">
-			<UniqueIdentifier>{1FE67838-895F-4EBE-81F6-9DCA1D71BD95}</UniqueIdentifier>
+			<UniqueIdentifier>{BBE2A23F-C694-457C-B7A9-7168CC007ED6}</UniqueIdentifier>
 		</Filter>
 		<ClCompile Include="..\..\Source\TestingGround\Private\AmmoPickup.cpp">
 			<Filter>Source\TestingGround\Private</Filter>
@@ -60,6 +60,9 @@
 		<ClCompile Include="..\..\Source\TestingGround\Private\EnemyCharacter.cpp">
 			<Filter>Source\TestingGround\Private</Filter>
 		</ClCompile >
+		<ClCompile Include="..\..\Source\TestingGround\Private\HealthPickup.cpp">
+			<Filter>Source\TestingGround\Private</Filter>
+		</ClCompile >
 		<ClCompile Include="..\..\Source\TestingGround\Private\MainCharacter.cpp">
 			<Filter>Source\TestingGround\Private</Filter>
 		</ClCompile >
@@ -76,7 +79,7 @@
 			<Filter>Source\TestingGround\Private</Filter>
 		</ClCompile >
 		<Filter Include="Source\TestingGround\Public">
-			<UniqueIdentifier>{D1EFA5D4-078E-4A7B-A5B4-464B62FE247D}</UniqueIdentifier>
+			<UniqueIdentifier>{0AC6A54D-AD64-490E-AA5F-7E37AF54BC90}</UniqueIdentifier>
 		</Filter>
 		<ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h">
 			<Filter>Source\TestingGround\Public</Filter>
@@ -99,6 +102,9 @@
 		<ClInclude Include="..\..\Source\TestingGround\Public\EnemyCharacter.h">
 			<Filter>Source\TestingGround\Public</Filter>
 		</ClInclude >
+		<ClInclude Include="..\..\Source\TestingGround\Public\HealthPickup.h">
+			<Filter>Source\TestingGround\Public</Filter>
+		</ClInclude >
 		<ClInclude Include="..\..\Source\TestingGround\Public\IDamageable.h">
 			<Filter>Source\TestingGround\Public</Filter>
 		</ClInclude >
@@ -118,10 +124,10 @@
 			<Filter>Source\TestingGround\Public</Filter>
 		</ClInclude >
 		<Filter Include="Source\TestingGround\Resources">
-			<UniqueIdentifier>{F0BB7120-A724-41F1-B66E-46EF321CE1E5}</UniqueIdentifier>
+			<UniqueIdentifier>{68257765-8724-4F7F-A1B7-9A125D3E62B4}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="Source\TestingGround\Resources\Windows">
-			<UniqueIdentifier>{B0EE181B-7E32-401B-85E4-EBE95554A1BE}</UniqueIdentifier>
+			<UniqueIdentifier>{4CE8EF66-4BAE-4749-9962-89FD24F02026}</UniqueIdentifier>
 		</Filter>
 		<None Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.ico">
 			<Filter>Source\TestingGround\Resources\Windows</Filter>

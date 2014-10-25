@@ -39,19 +39,13 @@ class TESTINGGROUND_API AMainCharacter : public ACharacterBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	float CameraTransitionSmoothSpeed;
 
+	/** The left and right mouse sensitivity*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float MouseXSensitivity;
 
+	/** The up and down mouse sensitivity */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	float MouseYSensitivity;
-
-	/**
-	 * The character picks up a specified amount of ammo
-	 * Returns the amount of ammo that the character picked up (He may not pick all of the ammo if he reaches the AmmoCapacity)
-	 * @param AmmoAmount - The amount of ammo that the character picks up
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Character Action")
-	int32 PickUpAmmo(int32 AmmoAmount);
+	float MouseYSensitivity;	
 
 	virtual void BeginPlay() override;
 

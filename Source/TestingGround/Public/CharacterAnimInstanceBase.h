@@ -48,6 +48,10 @@ class TESTINGGROUND_API UCharacterAnimInstanceBase : public UAnimInstance
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character")
 	bool bIsReloading;
 
+	/** Indicates if the character is dead */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character")
+	bool bIsDead;
+
 	virtual void BlueprintUpdateAnimation(float DeltaTimeX) override;
 
 	virtual void BlueprintInitializeAnimation() override;	

@@ -39,31 +39,14 @@ void AEnemyAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (this->Target != NULL)
+	if (this->Target != NULL && !this->ControlledCharacter->bIsDead)
 	{
+		float AcceptanceRadius = this->ControlledCharacter->AggroTrigger->GetUnscaledSphereRadius() * 0.7f;
+		bool bIsTargetCloseEnough = this->IsTargetCloseEnough(this->Target, AcceptanceRadius);
 		bool bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
-		bool bIsTargetCloseEnough = this->IsTargetCloseEnough(this->ControlledCharacter->AggroTrigger->GetUnscaledSphereRadius() * 0.7f);
 
-		if (bIsTargetInLineOfSight && bIsTargetCloseEnough)
-		{
-			if (!this->ControlledCharacter->bIsFiring)
-			{
-				this->ControlledCharacter->AimStart();
-				this->ControlledCharacter->FireStart();
-			}
-		}
-		else
-		{
-			this->ControlledCharacter->FireStop();
-			this->ControlledCharacter->AimStop();
-		}
-
-		if (this->ControlledCharacter->AmmoInClip == 0)
-		{
-			this->ControlledCharacter->ReloadStart();
-		}
-
-		this->ChaseTarget(this->Target, 200.0f, bIsTargetInLineOfSight, DeltaTime);
+		this->ShootTarget(this->Target, bIsTargetInLineOfSight, bIsTargetCloseEnough);
+		this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight, DeltaTime);
 	}
 	else
 	{
@@ -71,9 +54,9 @@ void AEnemyAIController::Tick(float DeltaTime)
 	}
 }
 
-void AEnemyAIController::ChaseTarget(AActor* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight, float DeltaTime)
+void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight, float DeltaTime)
 {
-	if (bIsTargetInLineOfSight)
+	if (bIsTargetInLineOfSight && !Target->bIsDead)
 	{
 		this->bShouldMoveToHomeLocation = false;
 		this->TargetLocation = Target->GetActorLocation();
@@ -81,7 +64,7 @@ void AEnemyAIController::ChaseTarget(AActor* Target, float AcceptanceRadius, boo
 	}
 	else
 	{
-		if (this->bShouldMoveToHomeLocation)
+		if (this->bShouldMoveToHomeLocation || Target->bIsDead)
 		{
 			this->MoveToLocation(this->HomeLocation);
 		}
@@ -98,6 +81,36 @@ void AEnemyAIController::ChaseTarget(AActor* Target, float AcceptanceRadius, boo
 				}
 			}
 		}
+	}
+}
+
+void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLineOfSight, bool bIsTargetCloseEnough)
+{
+	if (bIsTargetInLineOfSight && bIsTargetCloseEnough)
+	{
+		if (!Target->bIsDead && !this->ControlledCharacter->bIsFiring)
+		{
+			this->ControlledCharacter->AimStart();
+			this->ControlledCharacter->FireStart();
+		}
+		else if (Target->bIsDead)
+		{
+			this->ControlledCharacter->FireStop();
+			this->ControlledCharacter->AimStop();
+		}
+	}
+	else
+	{
+		if (this->ControlledCharacter->bIsFiring)
+		{
+			this->ControlledCharacter->FireStop();
+			this->ControlledCharacter->AimStop();
+		}
+	}
+
+	if (this->ControlledCharacter->AmmoInClip == 0)
+	{
+		this->ControlledCharacter->ReloadStart();
 	}
 }
 
@@ -143,14 +156,9 @@ bool AEnemyAIController::IsTargetInLineOfSight(AActor* Target) const
 	return bIsInLineOfSight;
 }
 
-bool AEnemyAIController::IsTargetCloseEnough(float AcceptanceRadius) const
+bool AEnemyAIController::IsTargetCloseEnough(AActor* Target, float AcceptanceRadius) const
 {
-	bool bIsCloseEnough = false;
-
-	if ((this->Target->GetActorLocation() -  this->ControlledCharacter->GetActorLocation()).Size() <= AcceptanceRadius)
-	{
-		bIsCloseEnough = true;
-	}
+	bool bIsCloseEnough = (Target->GetActorLocation() - this->ControlledCharacter->GetActorLocation()).Size() <= AcceptanceRadius;
 
 	return bIsCloseEnough;
 }

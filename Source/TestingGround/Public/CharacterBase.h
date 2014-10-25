@@ -27,6 +27,30 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Movement")
 	float AimSpeed;
 
+	/** The current health that the character has left */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	float Health;
+
+	/** The maximum health of the character that he can have left */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character")
+	float HealthCapacity;
+
+	/** The ammo capacity */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	int32 AmmoCapacity;
+
+	/** The clip capacity */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	int32 ClipCapacity;
+
+	/** The current amount of ammo that the character has */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	int32 Ammo;
+
+	/** The amount of ammo loaded in the clip */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	int32 AmmoInClip;
+
 	/** Indicates if the character is sprinting */
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsSprinting;
@@ -40,44 +64,24 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	bool bIsFiring;
 
 	/** Indicates if the character is reloading */
-	UPROPERTY(BlueprintReadWrite, Category = "Character")
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsReloading;
 
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
-	FVector GunOffset;
+	/** Indicates if the character is dead */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	bool bIsDead;
 	
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<ABallProjectile> ProjectileClass;
 
-	/** The current health that the character has left */
-	UPROPERTY(BlueprintReadOnly, Category = "Character|Gameplay")
-	float Health;
-
-	/** The maximum health of the character that he can have left */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Gameplay")
-	float HealthCapacity;
+	/** Gun muzzle's offset from the characters location */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	FVector GunOffset;
 
 	/** How many projectiles the character can fire each second */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay|Projectile")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	int32 ShotsPerSecond;
-
-	/** The ammo capacity */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay|Projectile")
-	int32 AmmoCapacity;
-
-	/** The clip capacity */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay|Projectile")
-	int32 ClipCapacity;
-
-	/** The current amount of ammo that the character has */
-	UPROPERTY(BlueprintReadOnly, Category = "Gameplay|Projectile")
-	int32 Ammo;
-
-	/** The amount of ammo loaded in the clip */
-	UPROPERTY(BlueprintReadOnly, Category = "Gameplay|Projectile")
-	int32 AmmoInClip;
 
 	/** Reloads the clip of the character */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")

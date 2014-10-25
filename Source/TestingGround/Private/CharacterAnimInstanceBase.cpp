@@ -13,6 +13,7 @@ UCharacterAnimInstanceBase::UCharacterAnimInstanceBase(const class FPostConstruc
 	this->bIsAiming = false;
 	this->bIsFiring = false;
 	this->bIsReloading = false;
+	this->bIsDead = false;
 }
 
 void UCharacterAnimInstanceBase::BlueprintInitializeAnimation()
@@ -32,6 +33,8 @@ void UCharacterAnimInstanceBase::BlueprintUpdateAnimation(float DeltaTimeX)
 
 	if (this->Character != NULL)
 	{
+		this->bIsDead = this->Character->bIsDead;
+
 		const FVector CharacterVelocity = this->Character->GetVelocity();
 		this->Speed = CharacterVelocity.Size();
 
@@ -51,5 +54,6 @@ void UCharacterAnimInstanceBase::BlueprintUpdateAnimation(float DeltaTimeX)
 		GEngine->AddOnScreenDebugMessage(4, 1.0f, FColor::Magenta, this->bIsFiring ? FString(TEXT("IsFiring: True")) : FString(TEXT("IsFiring: False")));
 		GEngine->AddOnScreenDebugMessage(5, 1.0f, FColor::Cyan, this->Character->bIsSprinting ? FString(TEXT("IsSprinting: True")) : FString(TEXT("IsSprinting: False")));
 		GEngine->AddOnScreenDebugMessage(6, 1.0f, FColor::Red, this->bIsReloading ? FString(TEXT("IsReloading: True")) : FString(TEXT("IsReloading: False")));
+		GEngine->AddOnScreenDebugMessage(7, 1.0f, FColor::Green, this->bIsDead ? FString(TEXT("IsDead: True")) : FString(TEXT("IsDead: False")));
 	}
 }

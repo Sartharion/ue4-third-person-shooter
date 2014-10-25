@@ -7,7 +7,7 @@
 ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
 {
-	this->CapsuleComponent->InitCapsuleSize(45.0f, 95.0f);
+	this->CapsuleComponent->InitCapsuleSize(42.0f, 95.0f);
 
 	// Don't rotate the character when the controller is rotated (This will affect only the camera)
 	this->bUseControllerRotationPitch = false;
@@ -19,6 +19,7 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->bIsFiring = false;
 	this->bIsSprinting = false;
 	this->bIsReloading = false;
+	this->bIsDead = false;
 	this->SprintSpeed = 700.0f; // in centimeters / second
 	this->JogSpeed = 450.0f; // in centimeters / second
 	this->AimSpeed = 200.0f; // in centimeters / second
@@ -239,5 +240,12 @@ void ACharacterBase::Reload()
 void ACharacterBase::TakeDamage(float Damage)
 {
 	this->Health -= Damage;
+
+	if (this->Health <= 0.0f)
+	{
+		this->bIsDead = true;
+		this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+		this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Ignore);
+	}
 }
 

@@ -13,4 +13,3 @@ AEnemyCharacter::AEnemyCharacter(const class FPostConstructInitializeProperties&
 	this->AggroTrigger->InitSphereRadius(1500.0f); // By default the aggro trigger has a radius of 15 meters
 }
 
-

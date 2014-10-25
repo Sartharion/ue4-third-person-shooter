@@ -45,6 +45,10 @@ class TESTINGGROUND_API AEnemyAIController : public AAIController
 	UFUNCTION(BlueprintCallable, Category = "Enemy Action")
 	void ShootTarget(ACharacterBase* Target, bool bIsTargetInLineOfSight, bool bIsTargetCloseEnough);
 
+	/** Stops all of the actions the enemy character is currently doing */
+	UFUNCTION(BlueprintCallable, Category = "Enemy Action")
+	void StopAllActions();
+
 	/**
 	 * Checks if a specified target is in the line of sight of the EnemyCharacter.
 	 * @param Target - the target to be checked

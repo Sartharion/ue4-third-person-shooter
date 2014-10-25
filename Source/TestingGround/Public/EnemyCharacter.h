@@ -15,6 +15,6 @@ class TESTINGGROUND_API AEnemyCharacter : public ACharacterBase
 
 	/** An overlap sphere used by AIControllers to check for nearby pawns */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
-	TSubobjectPtr<USphereComponent> AggroTrigger;	
+	TSubobjectPtr<USphereComponent> AggroTrigger;
 };
 

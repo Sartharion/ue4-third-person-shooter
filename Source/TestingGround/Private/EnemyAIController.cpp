@@ -39,16 +39,34 @@ void AEnemyAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (this->Target != NULL && !this->ControlledCharacter->bIsDead)
+	if (this->ControlledCharacter == NULL)
 	{
-		float AcceptanceRadius = this->ControlledCharacter->AggroTrigger->GetUnscaledSphereRadius() * 0.7f;
-		bool bIsTargetCloseEnough = this->IsTargetCloseEnough(this->Target, AcceptanceRadius);
-		bool bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
-
-		this->ShootTarget(this->Target, bIsTargetInLineOfSight, bIsTargetCloseEnough);
-		this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight, DeltaTime);
+		return;
 	}
-	else
+
+	if (this->Target != NULL)
+	{
+		if (!this->ControlledCharacter->bIsDead)
+		{
+			float AcceptanceRadius = this->ControlledCharacter->AggroTrigger->GetUnscaledSphereRadius() * 0.7f;
+			bool bIsTargetCloseEnough = this->IsTargetCloseEnough(this->Target, AcceptanceRadius);
+			bool bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
+
+			this->ShootTarget(this->Target, bIsTargetInLineOfSight, bIsTargetCloseEnough);
+			this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight, DeltaTime);
+		}
+		else
+		{
+			if (this->ControlledCharacter->bIsFiring ||
+				this->ControlledCharacter->bIsAiming ||
+				this->ControlledCharacter->bIsReloading ||
+				this->ControlledCharacter->bIsSprinting)
+			{
+				this->StopAllActions();
+			}
+		}
+	}
+	else if (!this->ControlledCharacter->bIsDead)
 	{
 		this->MoveToLocation(this->HomeLocation);
 	}
@@ -112,6 +130,14 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 	{
 		this->ControlledCharacter->ReloadStart();
 	}
+}
+
+void AEnemyAIController::StopAllActions()
+{
+	this->ControlledCharacter->FireStop();
+	this->ControlledCharacter->AimStop();
+	this->ControlledCharacter->SprintStop();
+	this->ControlledCharacter->ReloadStop();
 }
 
 bool AEnemyAIController::IsTargetInLineOfSight(AActor* Target) const

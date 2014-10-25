@@ -8,10 +8,12 @@
 AEnemyAIController::AEnemyAIController(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
 {
-	this->FieldOfView = 150.0f; // The FOV of the enemy character is degrees
-	this->TargetToFollow = NULL;
+	this->FieldOfView = 150.0f; // The FOV of the enemy character in degrees
+	this->Target = NULL;
 	this->TargetLocation = FVector::ZeroVector;
 	this->bShouldMoveToHomeLocation = true;
+	this->DelayBeforeGoingToHomeLocation = 2.5f; // in seconds
+	this->DelayBeforeGoingToHomeLocationCounter = 0.0f; // in seconds
 }
 
 void AEnemyAIController::BeginPlay()
@@ -37,50 +39,91 @@ void AEnemyAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (this->TargetToFollow != NULL)
+	if (this->Target != NULL)
 	{
-		this->TargetLocation = this->TargetToFollow->GetActorLocation();
-		if (this->IsTargetToFollowInLineOfSight())
-		{
-			this->bShouldMoveToHomeLocation = false;
-			this->MoveToLocation(this->TargetLocation, 100.0f);
+		bool bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
+		bool bIsTargetCloseEnough = this->IsTargetCloseEnough(this->ControlledCharacter->AggroTrigger->GetUnscaledSphereRadius() * 0.7f);
 
-			/*if (!this->ControlledCharacter->bIsFiring)
+		if (bIsTargetInLineOfSight && bIsTargetCloseEnough)
+		{
+			if (!this->ControlledCharacter->bIsFiring)
 			{
 				this->ControlledCharacter->AimStart();
 				this->ControlledCharacter->FireStart();
-			}*/
+			}
 		}
+		else
+		{
+			this->ControlledCharacter->FireStop();
+			this->ControlledCharacter->AimStop();
+		}
+
+		if (this->ControlledCharacter->AmmoInClip == 0)
+		{
+			this->ControlledCharacter->ReloadStart();
+		}
+
+		this->ChaseTarget(this->Target, 200.0f, bIsTargetInLineOfSight, DeltaTime);
 	}
 	else
 	{
-		this->MoveToLocation(this->HomeLocation, 10.0f);
+		this->MoveToLocation(this->HomeLocation);
 	}
 }
 
-bool AEnemyAIController::IsTargetToFollowInLineOfSight() const
+void AEnemyAIController::ChaseTarget(AActor* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight, float DeltaTime)
+{
+	if (bIsTargetInLineOfSight)
+	{
+		this->bShouldMoveToHomeLocation = false;
+		this->TargetLocation = Target->GetActorLocation();
+		this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
+	}
+	else
+	{
+		if (this->bShouldMoveToHomeLocation)
+		{
+			this->MoveToLocation(this->HomeLocation);
+		}
+		else
+		{
+			EPathFollowingRequestResult::Type PathRequestResult = this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
+			if (PathRequestResult == EPathFollowingRequestResult::AlreadyAtGoal)
+			{
+				this->DelayBeforeGoingToHomeLocationCounter += DeltaTime;
+				if (this->DelayBeforeGoingToHomeLocationCounter >= this->DelayBeforeGoingToHomeLocation)
+				{
+					this->bShouldMoveToHomeLocation = true;
+					this->DelayBeforeGoingToHomeLocationCounter = 0.0f;
+				}
+			}
+		}
+	}
+}
+
+bool AEnemyAIController::IsTargetInLineOfSight(AActor* Target) const
 {
 	bool bIsInLineOfSight = false;
 
-	if (this->TargetToFollow != NULL)
+	if (Target != NULL)
 	{
 		UWorld* World = this->GetWorld();
 		if (World != NULL)
 		{
-			// Make a raycast to the TargetToFollow to see if the target is visible
+			// Make a raycast to the Target to see if the it is visible
 			const FVector RayStart = this->ControlledCharacter->GetActorLocation() + FVector(0.0f, 0.0f, this->ControlledCharacter->BaseEyeHeight);
-			const FVector RayEnd = this->TargetLocation;
-			FCollisionQueryParams QueryParams(FName(TEXT("TargetToFollowVisibility")), false, this);
+			const FVector RayEnd = Target->GetActorLocation();
+			FCollisionQueryParams QueryParams(FName(TEXT("TargetVisibility")), false, this);
 			QueryParams.AddIgnoredActor(this->ControlledCharacter);
 			FHitResult HitResult;
 
 			if (World->LineTraceSingle(HitResult, RayStart, RayEnd, ECollisionChannel::ECC_Camera, QueryParams))
 			{
-				if (HitResult.Actor == this->TargetToFollow) 
+				if (HitResult.Actor == Target)
 				{
 					// The target is visible, but we need to check if the target is in the line of sight of the enemy character
 					FVector EnemyForwardVector = this->ControlledCharacter->GetActorForwardVector();
-					FVector DirectionToTarget = this->TargetLocation - this->ControlledCharacter->GetActorLocation();
+					FVector DirectionToTarget = Target->GetActorLocation() - this->ControlledCharacter->GetActorLocation();
 
 					EnemyForwardVector.Normalize();
 					DirectionToTarget.Normalize();
@@ -100,9 +143,21 @@ bool AEnemyAIController::IsTargetToFollowInLineOfSight() const
 	return bIsInLineOfSight;
 }
 
-AActor* AEnemyAIController::GetTargetToFollow() const
+bool AEnemyAIController::IsTargetCloseEnough(float AcceptanceRadius) const
 {
-	return this->TargetToFollow;
+	bool bIsCloseEnough = false;
+
+	if ((this->Target->GetActorLocation() -  this->ControlledCharacter->GetActorLocation()).Size() <= AcceptanceRadius)
+	{
+		bIsCloseEnough = true;
+	}
+
+	return bIsCloseEnough;
+}
+
+AActor* AEnemyAIController::GetTarget() const
+{
+	return this->Target;
 }
 
 FVector AEnemyAIController::GetTargetLastKnownLocation() const
@@ -120,7 +175,7 @@ void AEnemyAIController::OnAggroTriggerBeginOverlap(class AActor* OtherActor, cl
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if (MainCharacter != NULL)
 	{
-		this->TargetToFollow = MainCharacter;
+		this->Target = MainCharacter;
 	}
 }
 
@@ -129,7 +184,7 @@ void AEnemyAIController::OnAggroTriggerEndOverlap(class AActor* OtherActor, clas
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if (MainCharacter != NULL)
 	{
-		this->TargetToFollow = NULL;
+		this->Target = NULL;
 	}
 }
 

@@ -52,31 +52,31 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	TSubclassOf<ABallProjectile> ProjectileClass;
 
 	/** The current health that the character has left */
-	UPROPERTY(BlueprintReadOnly, Category = "Character | Gameplay")
+	UPROPERTY(BlueprintReadOnly, Category = "Character|Gameplay")
 	float Health;
 
 	/** The maximum health of the character that he can have left */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Gameplay")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Gameplay")
 	float HealthCapacity;
 
 	/** How many projectiles the character can fire each second */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay|Projectile")
 	int32 ShotsPerSecond;
 
 	/** The ammo capacity */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay|Projectile")
 	int32 AmmoCapacity;
 
 	/** The clip capacity */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay | Projectile")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay|Projectile")
 	int32 ClipCapacity;
 
 	/** The current amount of ammo that the character has */
-	UPROPERTY(BlueprintReadOnly, Category = "Gameplay | Projectile")
+	UPROPERTY(BlueprintReadOnly, Category = "Gameplay|Projectile")
 	int32 Ammo;
 
 	/** The amount of ammo loaded in the clip */
-	UPROPERTY(BlueprintReadOnly, Category = "Gameplay | Projectile")
+	UPROPERTY(BlueprintReadOnly, Category = "Gameplay|Projectile")
 	int32 AmmoInClip;
 
 	/** Reloads the clip of the character */

@@ -19,16 +19,27 @@ class TESTINGGROUND_API AEnemyAIController : public AAIController
 	float FieldOfView;
 
 	/** The controlled enemy character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy")
+	UPROPERTY(BlueprintReadOnly, Category = "Enemy")
 	AEnemyCharacter* ControlledCharacter;
 
-	/** Checks if the target to follow is in the line of sight of the EnemyCharacter */
+	/** The delay before the enemy goes to his home location in seconds */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	float DelayBeforeGoingToHomeLocation;
+
+	/** The enemy chases a specified target */
+	UFUNCTION(BlueprintCallable, Category = "Enemy Action|Target")
+	void ChaseTarget(AActor* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight, float DeltaTime);
+
+	/** Checks if a specified target is in the line of sight of the EnemyCharacter */
 	UFUNCTION(BlueprintCallable, Category = "Target")
-	bool IsTargetToFollowInLineOfSight() const;
+	bool IsTargetInLineOfSight(AActor* Target) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Target")
+	bool IsTargetCloseEnough(float AcceptanceRadius) const;
 
 	/** Gets the current followed target */
 	UFUNCTION(BlueprintCallable, Category = "Target")
-	AActor* GetTargetToFollow() const;
+	AActor* GetTarget() const;
 
 	/** Gets the last known location of the followed target */
 	UFUNCTION(BlueprintCallable, Category = "Target")
@@ -43,17 +54,23 @@ class TESTINGGROUND_API AEnemyAIController : public AAIController
 	void Tick(float DeltaTime) override;
 
 protected:
+	/** The current target to follow */
+	AActor* Target;
+
+	/** The last known location of the followed target */
+	FVector TargetLocation;
+
 	/** The location to where the enemy will go when the target to follow is lost */
 	FVector HomeLocation;
 
 	/** Indicates if the enemy character should to it's HomeLocation */
 	bool bShouldMoveToHomeLocation;
 
-	/** The current target to follow */
-	AActor* TargetToFollow;
-
-	/** The last known location of the followed target */
-	FVector TargetLocation;
+	/** 
+	 * The counter that determines when the enemy should go to his home location.
+	 * When this counter reaches the DelayBeforeGoingToHomeLocation, then the enemy start moving to the home location.
+	 */
+	float DelayBeforeGoingToHomeLocationCounter;
 
 	/** An event called when the AggroTrigger of the EnemyCharacter begins overlap */
 	UFUNCTION()

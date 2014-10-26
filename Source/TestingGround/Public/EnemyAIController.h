@@ -110,6 +110,14 @@ protected:
 	/** The index of the patrol point where the enemy character needs to move to */
 	int32 PatrolPoint;
 
+	/**
+	 * The character waits a specified amount of time (in seconds)
+	 * @param SecondsToWait - the seconds to wait
+	 * @param SecondsCounter - the seconds counter
+	 * @return "True" if the character is still waiting, "False" otherwise
+	 */
+	bool Wait(float SecondsToWait, float& SecondsCounter);
+
 	/** An event called when the AggroTrigger of the EnemyCharacter begins overlap */
 	UFUNCTION()
 	virtual void OnAggroTriggerBeginOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

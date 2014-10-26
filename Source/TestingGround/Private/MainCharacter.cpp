@@ -46,6 +46,11 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	if (this->bIsAiming)
 	{
 		this->MoveCameraCloserToCharacter(this->CameraTransitionSmoothSpeed, DeltaTime);

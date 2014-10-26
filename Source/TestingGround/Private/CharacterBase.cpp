@@ -58,6 +58,11 @@ void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	if (this->bIsFiring)
 	{
 		this->FireDelayCounter += DeltaTime;
@@ -71,6 +76,11 @@ void ACharacterBase::Tick(float DeltaTime)
 
 void ACharacterBase::MoveForward(float AxisValue)
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	if (this->Controller != NULL && AxisValue != 0.0f)
 	{
 		FRotator ControllerRotation = this->GetControlRotation();
@@ -84,6 +94,11 @@ void ACharacterBase::MoveForward(float AxisValue)
 
 void ACharacterBase::MoveRight(float AxisValue)
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	if (this->Controller != NULL && AxisValue != 0.0f)
 	{
 		FRotator ControllerRotation = this->GetControlRotation();
@@ -97,6 +112,11 @@ void ACharacterBase::MoveRight(float AxisValue)
 
 void ACharacterBase::SprintStart()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	this->bIsSprinting = true;
 
 	if (!this->bIsAiming && !this->bIsReloading)
@@ -107,6 +127,11 @@ void ACharacterBase::SprintStart()
 
 void ACharacterBase::SprintStop()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	this->bIsSprinting = false;
 
 	if (!this->bIsAiming)
@@ -117,6 +142,11 @@ void ACharacterBase::SprintStop()
 
 void ACharacterBase::AimStart()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	this->bIsAiming = true;
 
 	this->bUseControllerRotationYaw = true; // While the character is aiming he must use the controller's yaw rotation
@@ -126,6 +156,11 @@ void ACharacterBase::AimStart()
 
 void ACharacterBase::AimStop()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	this->bIsFiring = false;
 	this->bIsAiming = false;
 
@@ -145,6 +180,11 @@ void ACharacterBase::AimStop()
 
 void ACharacterBase::FireStart()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	if (!this->bIsReloading && this->bIsAiming)
 	{
 		this->bIsFiring = true;
@@ -155,6 +195,11 @@ void ACharacterBase::FireStart()
 
 void ACharacterBase::FireStop()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	this->bIsFiring = false;
 }
 
@@ -183,6 +228,11 @@ void ACharacterBase::OnFire()
 
 void ACharacterBase::ReloadStart()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	if (this->AmmoInClip < this->ClipCapacity &&
 		this->Ammo > 0)
 	{
@@ -198,6 +248,11 @@ void ACharacterBase::ReloadStart()
 
 void ACharacterBase::ReloadStop()
 {
+	if (this->bIsDead)
+	{
+		return;
+	}
+
 	this->bIsReloading = false;
 
 	// The character needs to start walking normaly again 

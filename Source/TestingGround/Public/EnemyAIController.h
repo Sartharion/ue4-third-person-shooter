@@ -36,9 +36,10 @@ class TESTINGGROUND_API AEnemyAIController : public AAIController
 	 * @param Target - the target to chase
 	 * @param AcceptanceRadius - the enemy will stop chasing if it reaches a specified AcceptanceRadius
 	 * @param bIsTargetInLineOfSight - the enemy will chase the target only if the target is in line of sight
+	 * @return "True" if the enemy character is chasing the target, "False" otherwise
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
-	void ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight);
+	bool ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight);
 
 	/**
 	 * The enemy starts shooting the target if the target is in line of sight and is close enough.

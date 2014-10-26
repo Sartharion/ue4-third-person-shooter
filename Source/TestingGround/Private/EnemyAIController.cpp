@@ -51,7 +51,12 @@ void AEnemyAIController::Tick(float DeltaTime)
 		bool bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
 
 		this->ShootTarget(this->Target, bIsTargetInLineOfSight, bIsTargetCloseEnough);
-		this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight);
+
+		if (!this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight))
+		{
+			// If the chase is not successful, then patrol
+			this->Patrol(this->ControlledCharacter->PatrolPoints);
+		}		
 	}
 	else
 	{
@@ -59,10 +64,14 @@ void AEnemyAIController::Tick(float DeltaTime)
 	}
 }
 
-void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight)
+bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight)
 {
+	bool bIsChasingTarget = false;
+
 	if (bIsTargetInLineOfSight && !Target->bIsDead)
 	{
+		bIsChasingTarget = true;
+
 		if (!this->ControlledCharacter->bIsSprinting)
 		{
 			this->ControlledCharacter->SprintStart();
@@ -72,25 +81,23 @@ void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 		this->TargetLocation = Target->GetActorLocation();
 		this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
 	}
-	else
+	else if (!this->ControlledCharacter->bIsPatrolling && !Target->bIsDead)
 	{
-		if (this->ControlledCharacter->bIsPatrolling || Target->bIsDead)
+		bIsChasingTarget = true;
+
+		EPathFollowingRequestResult::Type PathRequestResult = this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
+		if (PathRequestResult == EPathFollowingRequestResult::AlreadyAtGoal)
 		{
-			this->Patrol(this->ControlledCharacter->PatrolPoints);
-		}
-		else
-		{
-			EPathFollowingRequestResult::Type PathRequestResult = this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
-			if (PathRequestResult == EPathFollowingRequestResult::AlreadyAtGoal)
+			bool bStillWaiting = this->Wait(this->WaitTimeAfterChase, this->WaitTimeAfterChaseCounter);
+			if (!bStillWaiting)
 			{
-				bool bStillWaiting = this->Wait(this->WaitTimeAfterChase, this->WaitTimeAfterChaseCounter);
-				if (!bStillWaiting)
-				{
-					this->ControlledCharacter->bIsPatrolling = true;
-				}
+				bIsChasingTarget = false;
+				this->ControlledCharacter->bIsPatrolling = true;
 			}
 		}
 	}
+
+	return bIsChasingTarget;
 }
 
 void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLineOfSight, bool bIsTargetCloseEnough)

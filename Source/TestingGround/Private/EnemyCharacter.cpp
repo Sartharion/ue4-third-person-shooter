@@ -9,7 +9,8 @@ AEnemyCharacter::AEnemyCharacter(const class FPostConstructInitializeProperties&
 {
 	this->AggroTrigger = PCIP.CreateDefaultSubobject<USphereComponent>(this, FName(TEXT("AggroTrigger")));
 	this->AggroTrigger->AttachTo(this->RootComponent);
-
 	this->AggroTrigger->InitSphereRadius(1500.0f); // By default the aggro trigger has a radius of 15 meters
+
+	this->bIsPatrolling = true;
 }
 

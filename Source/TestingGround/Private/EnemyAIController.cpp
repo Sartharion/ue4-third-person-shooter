@@ -11,9 +11,11 @@ AEnemyAIController::AEnemyAIController(const class FPostConstructInitializePrope
 	this->FieldOfView = 150.0f; // The FOV of the enemy character in degrees
 	this->Target = NULL;
 	this->TargetLocation = FVector::ZeroVector;
-	this->bShouldMoveToHomeLocation = true;
-	this->DelayBeforeGoingToHomeLocation = 2.5f; // in seconds
-	this->DelayBeforeGoingToHomeLocationCounter = 0.0f; // in seconds
+	this->PatrolPoint = 0;
+	this->WaitTimeAtPatrolPoint = 5.0f; // In seconds
+	this->WaitTimeAtPatrolPointCounter = 0.0f; // In seconds
+	this->WaitTimeAfterChase = 5.0f; // In seconds
+	this->WaitTimeAfterChaseCounter = 0.0f; // In seconds
 }
 
 void AEnemyAIController::BeginPlay()
@@ -27,8 +29,6 @@ void AEnemyAIController::BeginPlay()
 
 		if (this->ControlledCharacter != NULL)
 		{
-			this->HomeLocation = this->ControlledCharacter->GetActorLocation();
-
 			this->ControlledCharacter->AggroTrigger->OnComponentBeginOverlap.AddDynamic(this, &AEnemyAIController::OnAggroTriggerBeginOverlap);
 			this->ControlledCharacter->AggroTrigger->OnComponentEndOverlap.AddDynamic(this, &AEnemyAIController::OnAggroTriggerEndOverlap);
 		}
@@ -53,7 +53,7 @@ void AEnemyAIController::Tick(float DeltaTime)
 			bool bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
 
 			this->ShootTarget(this->Target, bIsTargetInLineOfSight, bIsTargetCloseEnough);
-			this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight, DeltaTime);
+			this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight);
 		}
 		else
 		{
@@ -68,11 +68,11 @@ void AEnemyAIController::Tick(float DeltaTime)
 	}
 	else if (!this->ControlledCharacter->bIsDead)
 	{
-		this->MoveToLocation(this->HomeLocation);
+		this->Patrol(this->ControlledCharacter->PatrolPoints);
 	}
 }
 
-void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight, float DeltaTime)
+void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight)
 {
 	if (bIsTargetInLineOfSight && !Target->bIsDead)
 	{
@@ -81,31 +81,26 @@ void AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 			this->ControlledCharacter->SprintStart();
 		}
 
-		this->bShouldMoveToHomeLocation = false;
+		this->ControlledCharacter->bIsPatrolling = false;
 		this->TargetLocation = Target->GetActorLocation();
 		this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
 	}
 	else
 	{
-		if (this->bShouldMoveToHomeLocation || Target->bIsDead)
+		if (this->ControlledCharacter->bIsPatrolling || Target->bIsDead)
 		{
-			if (this->ControlledCharacter->bIsSprinting)
-			{
-				this->ControlledCharacter->SprintStop();
-			}
-
-			this->MoveToLocation(this->HomeLocation);
+			this->Patrol(this->ControlledCharacter->PatrolPoints);
 		}
 		else
 		{
 			EPathFollowingRequestResult::Type PathRequestResult = this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
 			if (PathRequestResult == EPathFollowingRequestResult::AlreadyAtGoal)
 			{
-				this->DelayBeforeGoingToHomeLocationCounter += DeltaTime;
-				if (this->DelayBeforeGoingToHomeLocationCounter >= this->DelayBeforeGoingToHomeLocation)
+				this->WaitTimeAfterChaseCounter += this->GetWorld()->GetDeltaSeconds();
+				if (this->WaitTimeAfterChaseCounter >= this->WaitTimeAfterChase)
 				{
-					this->bShouldMoveToHomeLocation = true;
-					this->DelayBeforeGoingToHomeLocationCounter = 0.0f;
+					this->ControlledCharacter->bIsPatrolling = true;
+					this->WaitTimeAfterChaseCounter = 0.0f;
 				}
 			}
 		}
@@ -141,6 +136,29 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 		this->ControlledCharacter->FireStop();
 		this->ControlledCharacter->AimStop();
 		this->ControlledCharacter->ReloadStart();
+	}
+}
+
+void AEnemyAIController::Patrol(const TArray<ATargetPoint*>& PatrolPoints)
+{
+	if (PatrolPoints.Num() > 0)
+	{
+		if (this->ControlledCharacter->bIsSprinting)
+		{
+			this->ControlledCharacter->SprintStop();
+		}
+
+		ATargetPoint* PatrolPointActor = PatrolPoints[this->PatrolPoint];
+		EPathFollowingRequestResult::Type PathRequestResult = this->MoveToActor(PatrolPointActor);
+		if (PathRequestResult == EPathFollowingRequestResult::AlreadyAtGoal)
+		{
+			this->WaitTimeAtPatrolPointCounter += this->GetWorld()->GetDeltaSeconds();
+			if (this->WaitTimeAtPatrolPointCounter >= this->WaitTimeAtPatrolPoint)
+			{
+				this->PatrolPoint = (this->PatrolPoint + 1) % PatrolPoints.Num();
+				this->WaitTimeAtPatrolPointCounter = 0.0f;
+			}
+		}		
 	}
 }
 
@@ -209,11 +227,6 @@ AActor* AEnemyAIController::GetTarget() const
 FVector AEnemyAIController::GetTargetLastKnownLocation() const
 {
 	return this->TargetLocation;
-}
-
-FVector AEnemyAIController::GetHomeLocation() const
-{
-	return this->HomeLocation;
 }
 
 void AEnemyAIController::OnAggroTriggerBeginOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

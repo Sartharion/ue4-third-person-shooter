@@ -3,17 +3,17 @@
 #pragma once
 
 #include "IDamageable.h"
-#include "BallProjectile.h"
+#include "ProjectileBase.h"
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_UCLASS_BODY()	
 
 	/** The speed of the character while jogging */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Movement")
@@ -70,23 +70,31 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	/** Indicates if the character is dead */
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsDead;
-	
+
+	/** Indicates if the character is using a rifle */
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+	bool bIsUsingRifle;
+
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
-	TSubclassOf<ABallProjectile> ProjectileClass;
+	TSubclassOf<AProjectileBase> ProjectileClass;
 
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
-	FVector GunOffset;
+	/** The socket name of the gun's muzzle */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun")
+	FName GunMuzzleSocketName;
 
-	/** How many projectiles the character can fire each second */
+	/** Gun muzzle's offset from the characters location. Use only if the character does not have weapon attached to him. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Gameplay")
+	FVector GunMuzzleOffset;
+
+	/** How many projectiles the character can fire each second, when he is using an autofire weapon */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	int32 ShotsPerSecond;
 
 	/** Reloads the clip of the character */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
 	void Reload();
-	
+
 	/**
 	 * The character picks up a specified amount of ammo.
 	 * @param AmmoAmount - The amount of ammo that the character picks up
@@ -146,6 +154,10 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 
 	/** The character stops reloading */
 	virtual void ReloadStop();
+
+protected:
+	/** A reference to the weapon skeletal mesh */
+	USkeletalMeshComponent* GunMesh;
 
 private:
 	/** The delay between the firing of projectiles in seconds */

@@ -4,7 +4,6 @@
 
 #include "CharacterBase.h"
 #include "IDamageable.h"
-#include "BallProjectile.h"
 #include "MainCharacter.generated.h"
 
 /**

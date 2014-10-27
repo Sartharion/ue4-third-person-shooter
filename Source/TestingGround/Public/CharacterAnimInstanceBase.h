@@ -52,6 +52,10 @@ class TESTINGGROUND_API UCharacterAnimInstanceBase : public UAnimInstance
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character")
 	bool bIsDead;
 
+	/** Indicates if the character is using a rifle */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character")
+	bool bIsUsingRifle;
+
 	virtual void BlueprintUpdateAnimation(float DeltaTimeX) override;
 
 	virtual void BlueprintInitializeAnimation() override;	

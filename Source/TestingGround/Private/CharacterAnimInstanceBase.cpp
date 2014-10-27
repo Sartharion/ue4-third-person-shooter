@@ -14,6 +14,7 @@ UCharacterAnimInstanceBase::UCharacterAnimInstanceBase(const class FPostConstruc
 	this->bIsFiring = false;
 	this->bIsReloading = false;
 	this->bIsDead = false;
+	this->bIsUsingRifle = false;
 }
 
 void UCharacterAnimInstanceBase::BlueprintInitializeAnimation()
@@ -41,6 +42,7 @@ void UCharacterAnimInstanceBase::BlueprintUpdateAnimation(float DeltaTimeX)
 		const FRotator CharacterRotation = this->Character->GetActorRotation();
 		this->Direction = this->CalculateDirection(CharacterVelocity, CharacterRotation);
 
+		this->bIsUsingRifle = this->Character->bIsUsingRifle;
 		this->bIsAiming = this->Character->bIsAiming;
 		this->bIsFiring = this->Character->bIsFiring;
 		this->bIsReloading = this->Character->bIsReloading;

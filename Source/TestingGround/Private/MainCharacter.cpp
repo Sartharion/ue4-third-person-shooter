@@ -82,9 +82,19 @@ void AMainCharacter::OnFire()
 		UWorld* World = this->GetWorld();
 		if (World != NULL)
 		{
-			// Find the SpawnLocation of the projectile
-			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-			const FVector SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(GunOffset);
+			// Find the spawn location of the projectile
+			FVector SpawnLocation;
+			if (this->GunMesh != NULL)
+			{
+				SpawnLocation = this->GunMesh->GetSocketLocation(this->GunMuzzleSocketName);
+				GEngine->AddOnScreenDebugMessage(20, 2.0f, FColor::Green, FString(TEXT("Muzzle Found")));
+			}
+			else
+			{
+				// In case there is no WeaponMesh, then find an alternative SpawnLocation.
+				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+				SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(this->GunMuzzleOffset);
+			}
 
 			// Find the SpawnRotation of the projectile
 			const FRotator CameraRotation = this->FollowCamera->GetComponentRotation();
@@ -115,7 +125,7 @@ void AMainCharacter::OnFire()
 			const FRotator SpawnRotation = FRotationMatrix::MakeFromX(ProjectileDirection).Rotator();
 
 			// Spawn the projectile and reduce the ammo in the clip
-			World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+			World->SpawnActor<AProjectileBase>(this->ProjectileClass, SpawnLocation, SpawnRotation);
 			this->AmmoInClip--;
 		}
 	}

@@ -20,6 +20,7 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->bIsSprinting = false;
 	this->bIsReloading = false;
 	this->bIsDead = false;
+	this->bIsUsingRifle = true;
 	this->SprintSpeed = 700.0f; // in centimeters / second
 	this->JogSpeed = 450.0f; // in centimeters / second
 	this->AimSpeed = 200.0f; // in centimeters / second
@@ -29,8 +30,9 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->CharacterMovement->JumpZVelocity = 350.0f;
 	this->CharacterMovement->AirControl = 0.2f; // 20% of the total control
 
-	// Set up the gameplay parameters
-	this->GunOffset = FVector(75.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
+	// Set up the gameplay features
+	this->GunMuzzleSocketName = "Muzzle"; // Default muzzle socket name
+	this->GunMuzzleOffset = FVector(75.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
 	this->ShotsPerSecond = 10; // How many projectiles the character can fire each second
 	this->AmmoCapacity = 300;
 	this->ClipCapacity = 30;
@@ -43,6 +45,11 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (this->Mesh->GetNumChildrenComponents() > 0)
+	{
+		this->GunMesh = Cast<USkeletalMeshComponent>(this->Mesh->GetChildComponent(0));
+	}
 
 	this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
 
@@ -63,7 +70,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		return;
 	}
 
-	if (this->bIsFiring)
+	if (this->bIsFiring && this->bIsUsingRifle)
 	{
 		this->FireDelayCounter += DeltaTime;
 		if (this->FireDelayCounter >= this->FireDelay)
@@ -211,16 +218,27 @@ void ACharacterBase::OnFire()
 		!this->bIsReloading &&
 		this->AmmoInClip > 0)
 	{
+		// Find the spawn rotation of the projectile
 		const FRotator SpawnRotation = this->GetControlRotation();
 
-		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-		const FVector SpawnLocation = this->GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
+		// Find the spawn location of the projectile
+		FVector SpawnLocation;
+		if (this->GunMesh != NULL)
+		{
+			SpawnLocation = this->GunMesh->GetSocketLocation(this->GunMuzzleSocketName);
+		}
+		else
+		{
+			// In case there is no WeaponMesh, then find an alternative SpawnLocation.
+			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+			SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(this->GunMuzzleOffset);
+		}
 
 		UWorld* const World = this->GetWorld();
 		if (World != NULL)
 		{
 			// Spawn the projectile at the muzzle
-			World->SpawnActor<ABallProjectile>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+			World->SpawnActor<AProjectileBase>(this->ProjectileClass, SpawnLocation, SpawnRotation);
 			this->AmmoInClip--;
 		}
 	}

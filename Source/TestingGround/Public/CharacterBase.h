@@ -118,6 +118,14 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
 	virtual void TakeDamage(float Damage) override;
 
+	/** Called internaly in the OnFire() function. Can be used for playing a fire animation */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Gun Action")
+	void OnFireAnimation();
+
+	/** Called internaly in the ReloadStart() function. Can be used for playing reload animation */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Gun Action")
+	void OnReloadAnimation();
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;

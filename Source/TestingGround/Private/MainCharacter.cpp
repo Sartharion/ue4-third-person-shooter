@@ -87,7 +87,6 @@ void AMainCharacter::OnFire()
 			if (this->GunMesh != NULL)
 			{
 				SpawnLocation = this->GunMesh->GetSocketLocation(this->GunMuzzleSocketName);
-				GEngine->AddOnScreenDebugMessage(20, 2.0f, FColor::Green, FString(TEXT("Muzzle Found")));
 			}
 			else
 			{
@@ -126,6 +125,7 @@ void AMainCharacter::OnFire()
 
 			// Spawn the projectile and reduce the ammo in the clip
 			World->SpawnActor<AProjectileBase>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+			this->OnFireAnimation();
 			this->AmmoInClip--;
 		}
 	}

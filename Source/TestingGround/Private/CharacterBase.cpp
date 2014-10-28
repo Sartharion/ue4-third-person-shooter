@@ -239,6 +239,7 @@ void ACharacterBase::OnFire()
 		{
 			// Spawn the projectile at the muzzle
 			World->SpawnActor<AProjectileBase>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+			this->OnFireAnimation();
 			this->AmmoInClip--;
 		}
 	}
@@ -256,6 +257,7 @@ void ACharacterBase::ReloadStart()
 	{
 		this->bIsFiring = false;
 		this->bIsReloading = true;
+		this->OnReloadAnimation();
 
 		if (!this->bIsAiming)
 		{

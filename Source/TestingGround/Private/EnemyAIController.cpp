@@ -124,7 +124,8 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 		}
 	}
 
-	if (this->ControlledCharacter->AmmoInClip == 0)
+	if (this->ControlledCharacter->AmmoInClip == 0 &&
+		!this->ControlledCharacter->bIsReloading)
 	{
 		this->ControlledCharacter->FireStop();
 		this->ControlledCharacter->AimStop();

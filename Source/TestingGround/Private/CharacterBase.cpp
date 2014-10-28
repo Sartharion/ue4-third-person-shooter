@@ -213,7 +213,7 @@ void ACharacterBase::FireStop()
 void ACharacterBase::OnFire()
 {
 	// Try and fire a projectile
-	if (this->ProjectileClass != NULL &&
+	if (this->RifleProjectileClass != NULL &&
 		this->bIsAiming &&
 		!this->bIsReloading &&
 		this->AmmoInClip > 0)
@@ -238,7 +238,11 @@ void ACharacterBase::OnFire()
 		if (World != NULL)
 		{
 			// Spawn the projectile at the muzzle
-			World->SpawnActor<AProjectileBase>(this->ProjectileClass, SpawnLocation, SpawnRotation);
+			if (this->bIsUsingRifle)
+			{
+				World->SpawnActor<AProjectileBase>(this->RifleProjectileClass, SpawnLocation, SpawnRotation);
+			}
+
 			this->OnFireAnimation();
 			this->AmmoInClip--;
 		}

@@ -75,9 +75,9 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsUsingRifle;
 
-	/** Projectile class to spawn */
+	/** Projectile class to spawn when using rifle */
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
-	TSubclassOf<AProjectileBase> ProjectileClass;
+	TSubclassOf<AProjectileBase> RifleProjectileClass;
 
 	/** The socket name of the gun's muzzle */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun")

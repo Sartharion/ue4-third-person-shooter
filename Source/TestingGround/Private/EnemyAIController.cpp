@@ -56,7 +56,7 @@ void AEnemyAIController::Tick(float DeltaTime)
 		{
 			// If the chase is not successful, then patrol
 			this->Patrol(this->ControlledCharacter->PatrolPoints);
-		}		
+		}
 	}
 	else
 	{
@@ -102,18 +102,38 @@ bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 
 void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLineOfSight, bool bIsTargetCloseEnough)
 {
+	if (this->ControlledCharacter->AmmoInClip == 0 &&
+		!this->ControlledCharacter->bIsReloading)
+	{
+		if (this->ControlledCharacter->bIsFiring)
+		{
+			this->ControlledCharacter->FireStop();
+			this->ControlledCharacter->AimStop();
+		}
+
+		this->ControlledCharacter->ReloadStart();
+
+		return;
+	}
+
+	if (this->Target == NULL || this->Target->bIsDead)
+	{
+		if (this->ControlledCharacter->bIsFiring)
+		{
+			this->ControlledCharacter->FireStop();
+			this->ControlledCharacter->AimStop();
+		}
+
+		return;
+	}
+
 	if (bIsTargetInLineOfSight && bIsTargetCloseEnough)
 	{
-		if (!Target->bIsDead && !this->ControlledCharacter->bIsFiring &&
+		if (!this->ControlledCharacter->bIsFiring &&
 			!this->ControlledCharacter->bIsReloading)
 		{
 			this->ControlledCharacter->AimStart();
 			this->ControlledCharacter->FireStart();
-		}
-		else if (Target->bIsDead)
-		{
-			this->ControlledCharacter->FireStop();
-			this->ControlledCharacter->AimStop();
 		}
 	}
 	else
@@ -124,14 +144,6 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 			this->ControlledCharacter->AimStop();
 		}
 	}
-
-	if (this->ControlledCharacter->AmmoInClip == 0 &&
-		!this->ControlledCharacter->bIsReloading)
-	{
-		this->ControlledCharacter->FireStop();
-		this->ControlledCharacter->AimStop();
-		this->ControlledCharacter->ReloadStart();
-	}
 }
 
 void AEnemyAIController::Patrol(const TArray<ATargetPoint*>& PatrolPoints)
@@ -141,6 +153,12 @@ void AEnemyAIController::Patrol(const TArray<ATargetPoint*>& PatrolPoints)
 		if (this->ControlledCharacter->bIsSprinting)
 		{
 			this->ControlledCharacter->SprintStop();
+		}
+
+		if (this->ControlledCharacter->bIsFiring)
+		{
+			this->ControlledCharacter->FireStop();
+			this->ControlledCharacter->AimStop();
 		}
 
 		ATargetPoint* PatrolPointActor = PatrolPoints[this->PatrolPoint];

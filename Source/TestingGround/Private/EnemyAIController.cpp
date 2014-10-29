@@ -104,7 +104,8 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 {
 	if (bIsTargetInLineOfSight && bIsTargetCloseEnough)
 	{
-		if (!Target->bIsDead && !this->ControlledCharacter->bIsFiring)
+		if (!Target->bIsDead && !this->ControlledCharacter->bIsFiring &&
+			!this->ControlledCharacter->bIsReloading)
 		{
 			this->ControlledCharacter->AimStart();
 			this->ControlledCharacter->FireStart();

@@ -129,6 +129,17 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 
 	if (bIsTargetInLineOfSight && bIsTargetCloseEnough)
 	{
+		// Update the control rotation so that the enemy character fires at correct direction
+		const FVector AimDirection = Target->GetActorLocation() - this->ControlledCharacter->GetActorLocation();
+		const FRotator AimControlRotation = FRotationMatrix::MakeFromX(AimDirection).Rotator();
+		this->ControlledCharacter->Controller->SetControlRotation(AimControlRotation);
+
+		// Update the yaw rotation of the enemy character so that when he is firing, he is facing his target
+		FRotator CharacterRotation = this->ControlledCharacter->GetActorRotation();
+		CharacterRotation.Yaw = AimControlRotation.Yaw;
+		this->ControlledCharacter->SetActorRotation(CharacterRotation);
+
+		// Start firing
 		if (!this->ControlledCharacter->bIsFiring &&
 			!this->ControlledCharacter->bIsReloading)
 		{

@@ -30,6 +30,18 @@ AProjectileBase::AProjectileBase(const class FPostConstructInitializeProperties&
 	this->Damage = 0.0f;
 }
 
+void AProjectileBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	this->SpawnLocation = this->GetActorLocation();
+}
+
+FVector AProjectileBase::GetSpawnLocation() const
+{
+	return this->SpawnLocation;
+}
+
 float AProjectileBase::GetDamage() const
 {
 	return this->Damage;

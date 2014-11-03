@@ -232,7 +232,7 @@ void AEnemyAIController::RespondToUnawareHit(const FHitResult& Hit, const AActor
 	const AProjectileBase* Projectile = Cast<AProjectileBase>(DamageCauser);
 	if (Projectile != NULL)
 	{
-		GEngine->AddOnScreenDebugMessage(30, 2.0f, FColor::Magenta, FString(TEXT("UnawareHit")));
+		GEngine->AddOnScreenDebugMessage(30, 2.0f, FColor::Magenta, Projectile->GetSpawnLocation().ToString());
 	}
 }
 

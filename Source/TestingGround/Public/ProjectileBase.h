@@ -25,6 +25,10 @@ class TESTINGGROUND_API AProjectileBase : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	TSubobjectPtr<class UProjectileMovementComponent> ProjectileMovement;
 
+	/** Gets the location where the projectile spawned */
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	FVector GetSpawnLocation() const;
+
 	/** Gets the damage that the projectile deals on impact */
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	virtual float GetDamage() const;
@@ -32,9 +36,15 @@ class TESTINGGROUND_API AProjectileBase : public AActor
 	/** Called when the projectile hits something */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Projectile")
 	void OnImpact(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	void BeginPlay() override;
 	
 protected:
 	/** Called when projectile hits something */
 	UFUNCTION()
-	virtual void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);	
+	virtual void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+private:
+	/** The location where the projectile spawned */
+	FVector SpawnLocation;
 };

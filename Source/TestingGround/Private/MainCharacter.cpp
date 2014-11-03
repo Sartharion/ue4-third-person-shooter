@@ -102,7 +102,7 @@ void AMainCharacter::OnFire()
 				const FVector ForwardVector = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X);
 
 				const FVector RayStart = CameraLocation;
-				const FVector RayEnd = RayStart + (ForwardVector * 10000);
+				const FVector RayEnd = RayStart + (ForwardVector * 10000.0f);
 				FCollisionQueryParams QueryParams(FName(TEXT("ProjectileTrace")), true, this);
 
 				//DrawDebugLine(World, RayStart, RayEnd, FColor::Green, false, 5.0f, 0, 2.0f);

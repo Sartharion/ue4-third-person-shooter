@@ -195,7 +195,7 @@ bool AEnemyAIController::ShootTarget(ACharacterBase* Target)
 
 void AEnemyAIController::Patrol(const TArray<ATargetPoint*>& PatrolPoints)
 {
-	if (PatrolPoints.Num() > 0)
+	if (PatrolPoints.Num() > 0 && this->ControlledCharacter->bIsPatrolling)
 	{
 		if (this->ControlledCharacter->bIsSprinting)
 		{
@@ -232,7 +232,24 @@ void AEnemyAIController::RespondToUnawareHit(const FHitResult& Hit, const AActor
 	const AProjectileBase* Projectile = Cast<AProjectileBase>(DamageCauser);
 	if (Projectile != NULL)
 	{
-		GEngine->AddOnScreenDebugMessage(30, 2.0f, FColor::Magenta, Projectile->GetSpawnLocation().ToString());
+		UWorld* World = this->GetWorld();
+		if (World != NULL)
+		{
+			// We need to cast a ray from the projectile's spawn location straight down
+			// to get a location on the ground and tell the enemy character to go there.
+			// This is because the projectile is fired from above the ground, and the enemy can't go in the air
+			const FVector RayStart = Projectile->GetSpawnLocation();
+			const FVector RayEnd = RayStart + (FVector::UpVector * -10000.0f);
+			FCollisionQueryParams QueryParams(FName(TEXT("SurfaceTrace")), true, this);
+			FHitResult HitResult;
+
+			if (World->LineTraceSingle(HitResult, RayStart, RayEnd, ECollisionChannel::ECC_Visibility, QueryParams))
+			{
+				this->ControlledCharacter->bIsPatrolling = false;
+				this->ControlledCharacter->SprintStart();
+				this->MoveToLocation(HitResult.Location);
+			}
+		}		
 	}
 }
 
@@ -242,6 +259,7 @@ void AEnemyAIController::StopAllActions()
 	this->ControlledCharacter->AimStop();
 	this->ControlledCharacter->SprintStop();
 	this->ControlledCharacter->ReloadStop();
+	this->ControlledCharacter->bIsPatrolling = false;
 }
 
 bool AEnemyAIController::IsTargetInLineOfSight(AActor* Target) const

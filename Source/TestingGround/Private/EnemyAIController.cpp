@@ -3,6 +3,7 @@
 #include "TestingGround.h"
 #include "EnemyAIController.h"
 #include "MainCharacter.h"
+#include "ProjectileBase.h"
 
 
 AEnemyAIController::AEnemyAIController(const class FPostConstructInitializeProperties& PCIP)
@@ -11,6 +12,8 @@ AEnemyAIController::AEnemyAIController(const class FPostConstructInitializePrope
 	this->FieldOfView = 150.0f; // The FOV of the enemy character in degrees
 	this->Target = NULL;
 	this->TargetLocation = FVector::ZeroVector;
+	this->bIsTargetInRange = false;
+	this->bIsTargetInLineOfSight = false;
 	this->PatrolPoint = 0;
 	this->WaitTimeAtPatrolPoint = 5.0f; // In seconds
 	this->WaitTimeAtPatrolPointCounter = 0.0f; // In seconds
@@ -46,15 +49,28 @@ void AEnemyAIController::Tick(float DeltaTime)
 
 	if (this->Target != NULL)
 	{
-		float AcceptanceRadius = this->ControlledCharacter->AggroTrigger->GetUnscaledSphereRadius() * 0.7f;
-		bool bIsTargetCloseEnough = this->IsTargetCloseEnough(this->Target, AcceptanceRadius);
-		bool bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
+		float AggroTriggerRadius = this->ControlledCharacter->AggroTrigger->GetUnscaledSphereRadius();
+		float ShootAcceptanceRadius = AggroTriggerRadius * 0.75f;
+		this->bIsTargetInRange = this->IsTargetInRange(this->Target, ShootAcceptanceRadius);
+		this->bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
+		GEngine->AddOnScreenDebugMessage(24, 2.0f, FColor::Cyan, FString::Printf(TEXT("IsTargetInLineOfSight: %d"), bIsTargetInLineOfSight));
 
-		this->ShootTarget(this->Target, bIsTargetInLineOfSight, bIsTargetCloseEnough);
-
-		if (!this->ChaseTarget(this->Target, 100.0f, bIsTargetInLineOfSight))
+		if (this->bIsTargetInLineOfSight)
 		{
-			// If the chase is not successful, then patrol
+			this->TargetLocation = this->Target->GetActorLocation();
+		}
+
+		GEngine->AddOnScreenDebugMessage(22, 2.0f, FColor::Red, FString(TEXT("TargetLocation")) + this->TargetLocation.ToString());
+
+		float ChaseAcceptanceRadius = 0.0f;
+		if (this->ShootTarget(this->Target))
+		{
+			ChaseAcceptanceRadius = ShootAcceptanceRadius;
+		}
+
+		if (!this->ChaseTarget(this->Target, ChaseAcceptanceRadius))
+		{
+			// If the chase was not successful, then patrol
 			this->Patrol(this->ControlledCharacter->PatrolPoints);
 		}
 	}
@@ -64,11 +80,11 @@ void AEnemyAIController::Tick(float DeltaTime)
 	}
 }
 
-bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight)
+bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRadius)
 {
 	bool bIsChasingTarget = false;
 
-	if (bIsTargetInLineOfSight && !Target->bIsDead)
+	if (this->bIsTargetInLineOfSight && !Target->bIsDead)
 	{
 		bIsChasingTarget = true;
 
@@ -78,13 +94,13 @@ bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 		}
 
 		this->ControlledCharacter->bIsPatrolling = false;
-		this->TargetLocation = Target->GetActorLocation();
 		this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
 	}
 	else if (!this->ControlledCharacter->bIsPatrolling && !Target->bIsDead)
 	{
 		bIsChasingTarget = true;
 
+		GEngine->AddOnScreenDebugMessage(25, 2.0f, FColor::Blue, FString::Printf(TEXT("AcceptanceRadius: %.2f"), AcceptanceRadius));
 		EPathFollowingRequestResult::Type PathRequestResult = this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
 		if (PathRequestResult == EPathFollowingRequestResult::AlreadyAtGoal)
 		{
@@ -100,7 +116,7 @@ bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 	return bIsChasingTarget;
 }
 
-void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLineOfSight, bool bIsTargetCloseEnough)
+bool AEnemyAIController::ShootTarget(ACharacterBase* Target)
 {
 	if (this->ControlledCharacter->AmmoInClip == 0 &&
 		!this->ControlledCharacter->bIsReloading)
@@ -108,26 +124,39 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 		if (this->ControlledCharacter->bIsFiring)
 		{
 			this->ControlledCharacter->FireStop();
+		}
+
+		if (this->ControlledCharacter->bIsAiming)
+		{
 			this->ControlledCharacter->AimStop();
 		}
 
 		this->ControlledCharacter->ReloadStart();
 
-		return;
+		if (this->bIsTargetInLineOfSight && this->bIsTargetInRange)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-
-	if (this->Target == NULL || this->Target->bIsDead)
+	else if (this->Target == NULL || this->Target->bIsDead)
 	{
 		if (this->ControlledCharacter->bIsFiring)
 		{
 			this->ControlledCharacter->FireStop();
+		}
+
+		if (this->ControlledCharacter->bIsAiming)
+		{
 			this->ControlledCharacter->AimStop();
 		}
 
-		return;
+		return false;
 	}
-
-	if (bIsTargetInLineOfSight && bIsTargetCloseEnough)
+	else if (this->bIsTargetInLineOfSight && this->bIsTargetInRange)
 	{
 		// Update the control rotation so that the enemy character fires at correct direction
 		const FVector AimDirection = Target->GetActorLocation() - this->ControlledCharacter->GetActorLocation();
@@ -140,20 +169,27 @@ void AEnemyAIController::ShootTarget(ACharacterBase* Target, bool bIsTargetInLin
 		this->ControlledCharacter->SetActorRotation(CharacterRotation);
 
 		// Start firing
-		if (!this->ControlledCharacter->bIsFiring &&
-			!this->ControlledCharacter->bIsReloading)
+		if (!this->ControlledCharacter->bIsFiring)
 		{
 			this->ControlledCharacter->AimStart();
 			this->ControlledCharacter->FireStart();
 		}
+
+		return true;
 	}
 	else
 	{
 		if (this->ControlledCharacter->bIsFiring)
 		{
-			this->ControlledCharacter->FireStop();
+			this->ControlledCharacter->FireStop();			
+		}
+
+		if (this->ControlledCharacter->bIsAiming)
+		{
 			this->ControlledCharacter->AimStop();
 		}
+
+		return false;
 	}
 }
 
@@ -182,6 +218,21 @@ void AEnemyAIController::Patrol(const TArray<ATargetPoint*>& PatrolPoints)
 				this->PatrolPoint = (this->PatrolPoint + 1) % PatrolPoints.Num();
 			}
 		}		
+	}
+}
+
+void AEnemyAIController::RespondToUnawareHit(const FHitResult& Hit, const AActor* DamageCauser)
+{
+	if (this->bIsTargetInLineOfSight)
+	{
+		// The enemy is aware of the target's location, so the hit is not unaware
+		return;
+	}
+
+	const AProjectileBase* Projectile = Cast<AProjectileBase>(DamageCauser);
+	if (Projectile != NULL)
+	{
+		GEngine->AddOnScreenDebugMessage(30, 2.0f, FColor::Magenta, FString(TEXT("UnawareHit")));
 	}
 }
 
@@ -235,9 +286,13 @@ bool AEnemyAIController::IsTargetInLineOfSight(AActor* Target) const
 	return bIsInLineOfSight;
 }
 
-bool AEnemyAIController::IsTargetCloseEnough(AActor* Target, float AcceptanceRadius) const
+bool AEnemyAIController::IsTargetInRange(AActor* Target, float AcceptanceRadius) const
 {
-	bool bIsCloseEnough = (Target->GetActorLocation() - this->ControlledCharacter->GetActorLocation()).Size() <= AcceptanceRadius;
+	float DistanceToTarget = (Target->GetActorLocation() - this->ControlledCharacter->GetActorLocation()).Size();
+	GEngine->AddOnScreenDebugMessage(20, 2.0f, FColor::Yellow, FString::Printf(TEXT("DistanceToTarget: %.2f"), DistanceToTarget));
+	GEngine->AddOnScreenDebugMessage(21, 2.0f, FColor::Green, FString::Printf(TEXT("AcceptanceRadius: %.2f"), AcceptanceRadius));
+
+	bool bIsCloseEnough = (DistanceToTarget <= AcceptanceRadius);
 
 	return bIsCloseEnough;
 }

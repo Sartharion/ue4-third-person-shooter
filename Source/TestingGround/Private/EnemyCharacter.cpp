@@ -2,6 +2,7 @@
 
 #include "TestingGround.h"
 #include "EnemyCharacter.h"
+#include "EnemyAIController.h"
 
 
 AEnemyCharacter::AEnemyCharacter(const class FPostConstructInitializeProperties& PCIP)
@@ -12,5 +13,16 @@ AEnemyCharacter::AEnemyCharacter(const class FPostConstructInitializeProperties&
 	this->AggroTrigger->InitSphereRadius(1500.0f); // By default the aggro trigger has a radius of 15 meters
 
 	this->bIsPatrolling = true;
+}
+
+void AEnemyCharacter::TakeDamage(float Damage, const FHitResult& Hit, const AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, Hit, DamageCauser);
+
+	AEnemyAIController* AIController = Cast<AEnemyAIController>(this->Controller);
+	if (AIController != NULL)
+	{
+		AIController->RespondToUnawareHit(Hit, DamageCauser);
+	}
 }
 

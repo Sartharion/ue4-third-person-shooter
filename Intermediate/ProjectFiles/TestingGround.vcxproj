@@ -60,7 +60,6 @@
     <ClCompile Include="..\..\Source\TestingGround\Private\EnemyCharacter.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\HealthPickup.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\MainCharacter.cpp" />
-    <ClCompile Include="..\..\Source\TestingGround\Private\MainCharacterAnimInstance.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\Pickup.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\ProjectileBase.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\SlidingDoor.cpp" />
@@ -73,7 +72,6 @@
     <ClInclude Include="..\..\Source\TestingGround\Public\HealthPickup.h" />
     <ClInclude Include="..\..\Source\TestingGround\Public\IDamageable.h" />
     <ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h" />
-    <ClInclude Include="..\..\Source\TestingGround\Public\MainCharacterAnimInstance.h" />
     <ClInclude Include="..\..\Source\TestingGround\Public\Pickup.h" />
     <ClInclude Include="..\..\Source\TestingGround\Public\ProjectileBase.h" />
     <ClInclude Include="..\..\Source\TestingGround\Public\SlidingDoor.h" />

@@ -213,38 +213,39 @@ void ACharacterBase::FireStop()
 void ACharacterBase::OnFire()
 {
 	// Try and fire a projectile
-	if (this->RifleProjectileClass != NULL &&
-		this->bIsAiming &&
-		!this->bIsReloading &&
-		this->AmmoInClip > 0)
+	if (this->RifleProjectileClass != NULL && this->bIsAiming && !this->bIsReloading)
 	{
-		// Find the spawn rotation of the projectile
-		const FRotator SpawnRotation = this->GetControlRotation();
+		this->OnFireEvent();
 
-		// Find the spawn location of the projectile
-		FVector SpawnLocation;
-		if (this->GunMesh != NULL)
+		if (this->AmmoInClip > 0)
 		{
-			SpawnLocation = this->GunMesh->GetSocketLocation(this->GunMuzzleSocketName);
-		}
-		else
-		{
-			// In case there is no WeaponMesh, then find an alternative SpawnLocation.
-			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-			SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(this->GunMuzzleOffset);
-		}
+			// Find the spawn rotation of the projectile
+			const FRotator SpawnRotation = this->GetControlRotation();
 
-		UWorld* const World = this->GetWorld();
-		if (World != NULL)
-		{
-			// Spawn the projectile at the muzzle
-			if (this->bIsUsingRifle)
+			// Find the spawn location of the projectile
+			FVector SpawnLocation;
+			if (this->GunMesh != NULL)
 			{
-				World->SpawnActor<AProjectileBase>(this->RifleProjectileClass, SpawnLocation, SpawnRotation);
+				SpawnLocation = this->GunMesh->GetSocketLocation(this->GunMuzzleSocketName);
+			}
+			else
+			{
+				// In case there is no WeaponMesh, then find an alternative SpawnLocation.
+				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+				SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(this->GunMuzzleOffset);
 			}
 
-			this->OnFireAnimation();
-			this->AmmoInClip--;
+			UWorld* const World = this->GetWorld();
+			if (World != NULL)
+			{
+				// Spawn the projectile at the muzzle
+				if (this->bIsUsingRifle)
+				{
+					World->SpawnActor<AProjectileBase>(this->RifleProjectileClass, SpawnLocation, SpawnRotation);
+				}
+
+				this->AmmoInClip--;
+			}
 		}
 	}
 }
@@ -261,7 +262,7 @@ void ACharacterBase::ReloadStart()
 	{
 		this->bIsFiring = false;
 		this->bIsReloading = true;
-		this->OnReloadAnimation();
+		this->OnReloadEvent();
 
 		if (!this->bIsAiming)
 		{
@@ -344,7 +345,7 @@ float ACharacterBase::GainHealth(float Health)
 	return GainedHealthAmount;
 }
 
-void ACharacterBase::TakeDamage(float Damage)
+void ACharacterBase::TakeDamage(float Damage, const FHitResult& Hit, const AActor* DamageCauser)
 {
 	this->Health -= Damage;
 
@@ -353,9 +354,7 @@ void ACharacterBase::TakeDamage(float Damage)
 		this->bIsDead = true;
 
 		this->CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		//this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
-		//this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Ignore);
-		//this->CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+		this->Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }
 

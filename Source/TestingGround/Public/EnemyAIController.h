@@ -31,24 +31,30 @@ class TESTINGGROUND_API AEnemyAIController : public AAIController
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Movement")
 	float WaitTimeAfterChase;
 
+	/** Indicates if the target is in range */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target")
+	bool bIsTargetInRange;
+
+	/** Indicates if the target is in line of sight */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target")
+	bool bIsTargetInLineOfSight;
+
 	/**
-	 * The enemy chases a specified target.
+	 * The enemy chases a specified target. The enemy will chase the target only if the target is in line of sight
 	 * @param Target - the target to chase
 	 * @param AcceptanceRadius - the enemy will stop chasing if it reaches a specified AcceptanceRadius
-	 * @param bIsTargetInLineOfSight - the enemy will chase the target only if the target is in line of sight
 	 * @return "True" if the enemy character is chasing the target, "False" otherwise
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
-	bool ChaseTarget(ACharacterBase* Target, float AcceptanceRadius, bool bIsTargetInLineOfSight);
+	bool ChaseTarget(ACharacterBase* Target, float AcceptanceRadius);
 
 	/**
-	 * The enemy starts shooting the target if the target is in line of sight and is close enough.
+	 * The enemy starts shooting the target if the target is in line of sight and is in range.
 	 * @param Target - the traget to shoot at
-	 * @param bIsTargetInLineOfSight - is the target in line of sight
-	 * @param bIsTargetCloseEnough - is the target close enough
+	 * @return True if the target was shot, False otherwise
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
-	void ShootTarget(ACharacterBase* Target, bool bIsTargetInLineOfSight, bool bIsTargetCloseEnough);
+	bool ShootTarget(ACharacterBase* Target);
 
 	/**
 	 * The enemy character starts patrolling.
@@ -56,6 +62,14 @@ class TESTINGGROUND_API AEnemyAIController : public AAIController
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
 	void Patrol(const TArray<ATargetPoint*>& PatrolPoints);
+
+	/**
+	 * The respond of the enemy character when is hit but is not aware of the target's location
+	 * @param Hit - The hit
+	 * @param DamageCauser - The Actor that caused the damage (a projectile for example)
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character Action")
+	void RespondToUnawareHit(const FHitResult& Hit, const AActor* DamageCauser);
 
 	/** Stops all of the actions the enemy character is currently doing */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
@@ -70,12 +84,12 @@ class TESTINGGROUND_API AEnemyAIController : public AAIController
 	bool IsTargetInLineOfSight(AActor* Target) const;
 
 	/**
-	 * Checks if the a specified target is close enough
-	 * @param AcceptanceRadius - the radius for which the target will be checked if is close enough
-	 * @return True if the target is close enough, Flase otherwise
+	 * Checks if the a specified target is in range
+	 * @param AcceptanceRadius - the radius for which the target will be checked if is in range
+	 * @return True if the target is in range, False otherwise
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Target")
-	bool IsTargetCloseEnough(AActor* Target, float AcceptanceRadius) const;
+	bool IsTargetInRange(AActor* Target, float AcceptanceRadius) const;
 
 	/** Gets the current followed target */
 	UFUNCTION(BlueprintCallable, Category = "Target")

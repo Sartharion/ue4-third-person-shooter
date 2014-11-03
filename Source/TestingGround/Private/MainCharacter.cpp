@@ -74,63 +74,64 @@ void AMainCharacter::LookUp(float AxisValue)
 void AMainCharacter::OnFire()
 {
 	// Try and fire a projectile
-	if (this->RifleProjectileClass != NULL &&
-		this->bIsAiming &&
-		!this->bIsReloading &&
-		this->AmmoInClip > 0)
+	if (this->RifleProjectileClass != NULL && this->bIsAiming && !this->bIsReloading)
 	{
-		UWorld* World = this->GetWorld();
-		if (World != NULL)
+		this->OnFireEvent();
+
+		if (this->AmmoInClip > 0)
 		{
-			// Find the spawn location of the projectile
-			FVector SpawnLocation;
-			if (this->GunMesh != NULL)
+			UWorld* World = this->GetWorld();
+			if (World != NULL)
 			{
-				SpawnLocation = this->GunMesh->GetSocketLocation(this->GunMuzzleSocketName);
-			}
-			else
-			{
-				// In case there is no WeaponMesh, then find an alternative SpawnLocation.
-				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(this->GunMuzzleOffset);
-			}
-
-			// Find the SpawnRotation of the projectile
-			const FRotator CameraRotation = this->FollowCamera->GetComponentRotation();
-			const FVector CameraLocation = this->FollowCamera->GetComponentLocation();
-			const FVector ForwardVector = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X);
-
-			const FVector RayStart = CameraLocation;
-			const FVector RayEnd = RayStart + (ForwardVector * 10000);
-			FCollisionQueryParams QueryParams(FName(TEXT("ProjectileTrace")), true, this);
-
-			//DrawDebugLine(World, RayStart, RayEnd, FColor::Green, false, 5.0f, 0, 2.0f);
-			//DrawDebugLine(World, SpawnLocation, RayEnd, FColor::Blue, false, 5.0f, 2.0f);
-
-			FVector ProjectileDirection = RayEnd - SpawnLocation; // The default projectile direction is from the SpawnLocation to the RayEnd
-			FHitResult HitResult;
-			if (World->LineTraceSingle(HitResult, RayStart, RayEnd, ECollisionChannel::ECC_Visibility, QueryParams))
-			{
-				ProjectileDirection = HitResult.Location - SpawnLocation; // If we hit something, we find more accurate projectile direction
-				DrawDebugLine(World, SpawnLocation, HitResult.Location, FColor::Red, false, 5.0f, 2.0f);
-
-				AActor* HitActor = HitResult.Actor.Get();
-				if (HitActor != NULL)
+				// Find the spawn location of the projectile
+				FVector SpawnLocation;
+				if (this->GunMesh != NULL)
 				{
-					GEngine->AddOnScreenDebugMessage(10, 2.0f, FColor::White, HitActor->GetName());
+					SpawnLocation = this->GunMesh->GetSocketLocation(this->GunMuzzleSocketName);
 				}
+				else
+				{
+					// In case there is no WeaponMesh, then find an alternative SpawnLocation.
+					// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+					SpawnLocation = this->GetActorLocation() + this->GetControlRotation().RotateVector(this->GunMuzzleOffset);
+				}
+
+				// Find the SpawnRotation of the projectile
+				const FRotator CameraRotation = this->FollowCamera->GetComponentRotation();
+				const FVector CameraLocation = this->FollowCamera->GetComponentLocation();
+				const FVector ForwardVector = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X);
+
+				const FVector RayStart = CameraLocation;
+				const FVector RayEnd = RayStart + (ForwardVector * 10000);
+				FCollisionQueryParams QueryParams(FName(TEXT("ProjectileTrace")), true, this);
+
+				//DrawDebugLine(World, RayStart, RayEnd, FColor::Green, false, 5.0f, 0, 2.0f);
+				//DrawDebugLine(World, SpawnLocation, RayEnd, FColor::Blue, false, 5.0f, 2.0f);
+
+				FVector ProjectileDirection = RayEnd - SpawnLocation; // The default projectile direction is from the SpawnLocation to the RayEnd
+				FHitResult HitResult;
+				if (World->LineTraceSingle(HitResult, RayStart, RayEnd, ECollisionChannel::ECC_Visibility, QueryParams))
+				{
+					ProjectileDirection = HitResult.Location - SpawnLocation; // If we hit something, we find more accurate projectile direction
+					DrawDebugLine(World, SpawnLocation, HitResult.Location, FColor::Red, false, 5.0f, 2.0f);
+
+					AActor* HitActor = HitResult.Actor.Get();
+					if (HitActor != NULL)
+					{
+						GEngine->AddOnScreenDebugMessage(10, 2.0f, FColor::White, HitActor->GetName());
+					}
+				}
+
+				const FRotator SpawnRotation = FRotationMatrix::MakeFromX(ProjectileDirection).Rotator();
+
+				// Spawn the projectile and reduce the ammo in the clip
+				if (this->bIsUsingRifle)
+				{
+					World->SpawnActor<AProjectileBase>(this->RifleProjectileClass, SpawnLocation, SpawnRotation);
+				}
+
+				this->AmmoInClip--;
 			}
-
-			const FRotator SpawnRotation = FRotationMatrix::MakeFromX(ProjectileDirection).Rotator();
-
-			// Spawn the projectile and reduce the ammo in the clip
-			if (this->bIsUsingRifle)
-			{
-				World->SpawnActor<AProjectileBase>(this->RifleProjectileClass, SpawnLocation, SpawnRotation);
-			}
-
-			this->OnFireAnimation();
-			this->AmmoInClip--;
 		}
 	}
 }
@@ -165,7 +166,7 @@ void AMainCharacter::MoveCameraCloserToCharacter(float TransitionSmoothSpeed, fl
 			FMath::Lerp(this->CameraBoom->TargetArmLength, this->CameraBoomLengthWhileAiming, TransitionSmoothSpeed * DeltaTime);
 	}
 
-	if (FMath::Abs(this->CameraBoomExtension->TargetArmLength - this->CameraBoomExtensionLengthWhileAiming) > 1.0)
+	if (FMath::Abs(this->CameraBoomExtension->TargetArmLength - this->CameraBoomExtensionLengthWhileAiming) > 1.0f)
 	{
 		// The camera must be at this distance right of the target
 		this->CameraBoomExtension->TargetArmLength =
@@ -182,7 +183,7 @@ void AMainCharacter::MoveCameraAwayFromCharacter(float TransitionSmoothSpeed, fl
 			FMath::Lerp(this->CameraBoom->TargetArmLength, this->CameraBoomLengthCache, TransitionSmoothSpeed * DeltaTime);
 	}
 
-	if (FMath::Abs(this->CameraBoomExtension->TargetArmLength - this->CameraBoomExtensionLengthCache) > 1.0)
+	if (FMath::Abs(this->CameraBoomExtension->TargetArmLength - this->CameraBoomExtensionLengthCache) > 1.0f)
 	{
 		// The camera must get closer to the right shoulder of the character
 		this->CameraBoomExtension->TargetArmLength =

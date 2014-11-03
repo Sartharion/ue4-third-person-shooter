@@ -17,6 +17,6 @@ class TESTINGGROUND_API AHealthPickup : public APickup
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Content")
 	float Health;
 
-	void OnPickedUp(APawn* Picker) override;	
+	void OnPickedUp(APawn* Picker) override;
 };
 

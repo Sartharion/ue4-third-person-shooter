@@ -25,5 +25,7 @@ class TESTINGGROUND_API AEnemyCharacter : public ACharacterBase
 	/** The patrol points of the enemy character */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Movement")
 	TArray<ATargetPoint*> PatrolPoints;
+
+	void TakeDamage(float Damage, const FHitResult& Hit, const AActor* DamageCauser) override;
 };
 

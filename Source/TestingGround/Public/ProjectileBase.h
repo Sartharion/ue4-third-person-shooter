@@ -31,7 +31,7 @@ class TESTINGGROUND_API AProjectileBase : public AActor
 
 	/** Called when the projectile hits something */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Projectile")
-	void OnImpact();
+	void OnImpact(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 protected:
 	/** Called when projectile hits something */

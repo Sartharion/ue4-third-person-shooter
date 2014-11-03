@@ -114,17 +114,19 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	/**
 	 * The character takes damage.
 	 * @param Damage - The amount of damage that the character gets
+	 * @param Hit - The resulting hit
+	 * @param DamageCauser - The actor that caused the damage (a projectile for example)
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
-	virtual void TakeDamage(float Damage) override;
+	virtual void TakeDamage(float Damage, const FHitResult& Hit, const AActor* DamageCauser) override;
 
 	/** Called internaly in the OnFire() function. Can be used for playing a fire animation */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Gun Action")
-	void OnFireAnimation();
+	void OnFireEvent();
 
 	/** Called internaly in the ReloadStart() function. Can be used for playing reload animation */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Gun Action")
-	void OnReloadAnimation();
+	void OnReloadEvent();
 
 	virtual void BeginPlay() override;
 

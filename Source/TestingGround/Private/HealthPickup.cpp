@@ -28,5 +28,10 @@ void AHealthPickup::OnPickedUp(APawn* Picker)
 		{
 			this->Health -= GainedHealthAmount;
 		}
+
+		if (GainedHealthAmount != 0 && this->PickupSound != NULL)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, this->PickupSound, this->GetActorLocation());
+		}
 	}
 }

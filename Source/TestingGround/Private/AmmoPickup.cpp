@@ -28,6 +28,11 @@ void AAmmoPickup::OnPickedUp(APawn* Picker)
 		{
 			this->Ammo -= PickedUpAmount;
 		}
+
+		if (PickedUpAmount != 0 && this->PickupSound != NULL)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, this->PickupSound, this->GetActorLocation());
+		}
 	}
 }
 

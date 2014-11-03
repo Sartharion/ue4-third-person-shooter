@@ -10,24 +10,22 @@ APickup::APickup(const class FPostConstructInitializeProperties& PCIP)
 	this->PrimaryActorTick.bCanEverTick = true;
 
 	// Initialize the collision component
-	this->SphereComponent = PCIP.CreateDefaultSubobject<USphereComponent>(this, FName(TEXT("SphereCollisionComponent")));
-	this->SphereComponent->InitSphereRadius(25.0f);
+	this->BoxComponent = PCIP.CreateDefaultSubobject<UBoxComponent>(this, FName(TEXT("BoxCollisionComponent")));
+	this->BoxComponent->bCanEverAffectNavigation = false;
+	this->BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	this->BoxComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	this->BoxComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	this->BoxComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
-	this->RootComponent = this->SphereComponent;
+	this->RootComponent = this->BoxComponent;
 
 	// Initialize the static mesh component
 	this->PickupMesh = PCIP.CreateDefaultSubobject<UStaticMeshComponent>(this, FName(TEXT("PickupMesh")));
 	this->PickupMesh->AttachTo(this->RootComponent);
+	this->PickupMesh->bAbsoluteScale = true;
+	this->PickupMesh->bCanEverAffectNavigation = false;
 
 	this->bIsActive = true; // The Pickup can be picked up be default
-	this->RotationRate = FRotator(30.0f, 45.0f, 60.0f); // The rotation rate at which the pickup will rotate
-}
-
-void APickup::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	this->AddActorLocalRotation(this->RotationRate * DeltaTime);
 }
 
 void APickup::ReceiveActorBeginOverlap(AActor* OtherActor)
@@ -43,6 +41,6 @@ void APickup::ReceiveActorBeginOverlap(AActor* OtherActor)
 
 void APickup::OnPickedUp(APawn* Picker)
 {
-
+	
 }
 

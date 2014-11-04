@@ -3,15 +3,20 @@
 #pragma once
 
 #include "ProjectileBase.h"
+#include "WeaponType.h"
 
 /**
- * 
- */
+*
+*/
 class TESTINGGROUND_API FWeapon
 {
-public:
-	FWeapon(int32 AmmoCapacity, int32 ClipCapacity, TSubclassOf<AProjectileBase> ProjectileClass);
+	FWeapon(EWeaponType::Type WeaponType, int32 AmmoCapacity, int32 ClipCapacity, TSubclassOf<AProjectileBase> ProjectileClass);
 	~FWeapon();
+	FWeapon(const FWeapon& Other);
+
+	FWeapon& operator=(const FWeapon& Other);
+
+	EWeaponType::Type GetWeaponType() const;
 
 	int32 GetAmmoCapacity() const;
 	void SetAmmoCapacity(int32 AmmoCapacity);
@@ -31,6 +36,9 @@ public:
 	void Reload();
 
 private:
+	/** Weapon type */
+	EWeaponType::Type WeaponType;
+
 	/** The total ammo capacity */
 	int32 AmmoCapacity;
 

@@ -3,8 +3,9 @@
 #include "TestingGround.h"
 #include "Weapon.h"
 
-FWeapon::FWeapon(int32 AmmoCapacity, int32 ClipCapacity, TSubclassOf<AProjectileBase> ProjectileClass)
+FWeapon::FWeapon(EWeaponType::Type WeaponType, int32 AmmoCapacity, int32 ClipCapacity, TSubclassOf<AProjectileBase> ProjectileClass)
 {
+	this->WeaponType = WeaponType;
 	this->SetAmmoCapacity(AmmoCapacity);
 	this->SetClipCapacity(ClipCapacity);
 	this->SetRemainingAmmo(this->AmmoCapacity - this->ClipCapacity);
@@ -12,8 +13,33 @@ FWeapon::FWeapon(int32 AmmoCapacity, int32 ClipCapacity, TSubclassOf<AProjectile
 	this->SetProjectileClass(ProjectileClass);
 }
 
+FWeapon::FWeapon(const FWeapon& Other)
+{
+	*this = Other;
+}
+
 FWeapon::~FWeapon()
 {
+}
+
+FWeapon& FWeapon::operator=(const FWeapon& Other)
+{
+	if (this != &Other)
+	{
+		this->WeaponType = Other.WeaponType;
+		this->AmmoCapacity = Other.AmmoCapacity;
+		this->ClipCapacity = Other.ClipCapacity;
+		this->RemainingAmmo = Other.RemainingAmmo;
+		this->AmmoInClip = Other.AmmoInClip;
+		this->ProjectileClass = Other.ProjectileClass;
+	}
+
+	return *this;
+}
+
+EWeaponType::Type FWeapon::GetWeaponType() const
+{
+	return this->WeaponType;
 }
 
 int32 FWeapon::GetAmmoCapacity() const

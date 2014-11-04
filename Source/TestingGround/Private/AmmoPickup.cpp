@@ -2,13 +2,13 @@
 
 #include "TestingGround.h"
 #include "AmmoPickup.h"
-#include "MainCharacter.h"
 
 
 AAmmoPickup::AAmmoPickup(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
 {
-	this->Ammo = 15;
+	this->Ammo = 30;
+	this->PickUpAmmoMethodPtr = &AMainCharacter::PickUpAmmo;
 }
 
 void AAmmoPickup::OnPickedUp(APawn* Picker)
@@ -16,9 +16,9 @@ void AAmmoPickup::OnPickedUp(APawn* Picker)
 	Super::OnPickedUp(Picker);
 
 	AMainCharacter* Character = Cast<AMainCharacter>(Picker);
-	if (Character != NULL)
+	if (Character != NULL && this->PickUpAmmoMethodPtr != NULL)
 	{
-		int32 PickedUpAmount = Character->PickUpAmmo(this->Ammo);
+		int32 PickedUpAmount = (Character->*PickUpAmmoMethodPtr)(this->Ammo);
 
 		if (PickedUpAmount == this->Ammo)
 		{

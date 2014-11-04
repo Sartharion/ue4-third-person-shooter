@@ -51,6 +51,7 @@
     <None Include="..\..\Config\DefaultInput.ini" />
     <None Include="..\..\Source\TestingGround\TestingGround.Build.cs" />
     <ClCompile Include="..\..\Source\TestingGround\TestingGround.cpp" />
+    <ClInclude Include="..\..\Source\TestingGround\Public\MethodDelegate.h" />
     <ClInclude Include="..\..\Source\TestingGround\TestingGround.h" />
     <ClCompile Include="..\..\Source\TestingGround\Private\AmmoPickup.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\CharacterAnimInstanceBase.cpp" />

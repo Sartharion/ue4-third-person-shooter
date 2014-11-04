@@ -140,5 +140,8 @@
     <ClInclude Include="..\..\Source\TestingGround\Public\EnemyCharacter.h">
       <Filter>Source\TestingGround\Public\Characters</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TestingGround\Public\MethodDelegate.h">
+      <Filter>Source\TestingGround\Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

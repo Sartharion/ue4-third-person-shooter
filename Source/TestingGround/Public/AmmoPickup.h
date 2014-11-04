@@ -3,7 +3,11 @@
 #pragma once
 
 #include "Pickup.h"
+#include "MainCharacter.h"
+#include "MethodDelegate.h"
 #include "AmmoPickup.generated.h"
+
+typedef TMethodDelegate<AMainCharacter>::OneParam<int32, int32>::TMethodPtr PickUpAmmoMethodPtr;
 
 /**
  * 
@@ -18,5 +22,8 @@ class TESTINGGROUND_API AAmmoPickup : public APickup
 	int32 Ammo;
 
 	void OnPickedUp(APawn* Picker) override;
+
+protected:
+	PickUpAmmoMethodPtr PickUpAmmoMethodPtr;
 };
 

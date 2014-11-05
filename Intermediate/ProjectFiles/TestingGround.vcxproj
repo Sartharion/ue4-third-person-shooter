@@ -51,7 +51,6 @@
     <None Include="..\..\Config\DefaultInput.ini" />
     <None Include="..\..\Source\TestingGround\TestingGround.Build.cs" />
     <ClCompile Include="..\..\Source\TestingGround\TestingGround.cpp" />
-    <ClInclude Include="..\..\Source\TestingGround\Public\WeaponType.h" />
     <ClInclude Include="..\..\Source\TestingGround\TestingGround.h" />
     <ClCompile Include="..\..\Source\TestingGround\Private\AmmoPickup.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\CharacterAnimInstanceBase.cpp" />
@@ -65,6 +64,7 @@
     <ClCompile Include="..\..\Source\TestingGround\Private\ProjectileBase.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\SlidingDoor.cpp" />
     <ClCompile Include="..\..\Source\TestingGround\Private\Weapon.cpp" />
+    <ClCompile Include="..\..\Source\TestingGround\Private\WeaponType.cpp" />
     <ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h" />
     <ClInclude Include="..\..\Source\TestingGround\Public\CharacterAnimInstanceBase.h" />
     <ClInclude Include="..\..\Source\TestingGround\Public\CharacterBase.h" />

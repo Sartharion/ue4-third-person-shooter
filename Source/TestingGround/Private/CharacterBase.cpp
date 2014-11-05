@@ -31,12 +31,16 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->CharacterMovement->AirControl = 0.2f; // 20% of the total control
 
 	// Set up the gameplay features
+	this->HealthCapacity = 1000.0f;
+	this->ShotsPerSecond = 10; // How many projectiles the character can fire each second
 	this->GunMuzzleSocketName = "Muzzle"; // Default muzzle socket name
 	this->GunMuzzleOffset = FVector(75.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
-	this->ShotsPerSecond = 10; // How many projectiles the character can fire each second
-	this->AmmoCapacity = 300;
-	this->ClipCapacity = 30;
-	this->HealthCapacity = 1000.0f;
+
+	// Set up the weapon
+	//this->Rifle = NewObject<UWeapon>();
+	//this->Rifle->WeaponType = EWeaponType::Rifle;
+	this->Rifle = NewObject<UWeapon>();
+	this->EquippedWeapon = NULL;
 
 	// Note: The skeletal mesh and animation blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named BP_MainCharacter (to avoid direct content references in C++)
@@ -45,6 +49,8 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	this->Health = this->HealthCapacity;
 
 	if (this->Mesh->GetNumChildrenComponents() > 0)
 	{
@@ -55,10 +61,6 @@ void ACharacterBase::BeginPlay()
 
 	this->FireDelay = 1.0f / this->ShotsPerSecond;
 	this->FireDelayCounter = 0.0f;
-
-	this->Ammo = this->AmmoCapacity - this->ClipCapacity;
-	this->AmmoInClip = this->ClipCapacity;
-	this->Health = this->HealthCapacity;
 }
 
 void ACharacterBase::Tick(float DeltaTime)
@@ -213,11 +215,13 @@ void ACharacterBase::FireStop()
 void ACharacterBase::OnFire()
 {
 	// Try and fire a projectile
-	if (this->RifleProjectileClass != NULL && this->bIsAiming && !this->bIsReloading)
+	if (this->EquippedWeapon != NULL &&
+		this->EquippedWeapon->ProjectileClass != NULL &&
+		this->bIsAiming && !this->bIsReloading)
 	{
 		this->OnFireEvent();
 
-		if (this->AmmoInClip > 0)
+		if (this->EquippedWeapon->AmmoInClip > 0)
 		{
 			// Find the spawn rotation of the projectile
 			const FRotator SpawnRotation = this->GetControlRotation();
@@ -239,12 +243,8 @@ void ACharacterBase::OnFire()
 			if (World != NULL)
 			{
 				// Spawn the projectile at the muzzle
-				if (this->bIsUsingRifle)
-				{
-					World->SpawnActor<AProjectileBase>(this->RifleProjectileClass, SpawnLocation, SpawnRotation);
-				}
-
-				this->AmmoInClip--;
+				World->SpawnActor<AProjectileBase>(this->EquippedWeapon->ProjectileClass, SpawnLocation, SpawnRotation);
+				this->EquippedWeapon->AmmoInClip--;
 			}
 		}
 	}
@@ -257,8 +257,8 @@ void ACharacterBase::ReloadStart()
 		return;
 	}
 
-	if (this->AmmoInClip < this->ClipCapacity &&
-		this->Ammo > 0)
+	if ((this->EquippedWeapon->AmmoInClip < this->EquippedWeapon->ClipCapacity) &&
+		(this->EquippedWeapon->RemainingAmmo > 0))
 	{
 		this->bIsFiring = false;
 		this->bIsReloading = true;
@@ -297,38 +297,14 @@ void ACharacterBase::ReloadStop()
 
 void ACharacterBase::Reload()
 {
-	if (this->AmmoInClip < this->ClipCapacity &&
-		this->Ammo > 0)
-	{
-		int32 AmmoToReload = this->ClipCapacity - this->AmmoInClip;
-
-		if (this->Ammo > AmmoToReload)
-		{
-			this->AmmoInClip += AmmoToReload;
-			this->Ammo -= AmmoToReload;
-		}
-		else
-		{
-			this->AmmoInClip += this->Ammo;
-			this->Ammo = 0;
-		}
-	}
+	this->EquippedWeapon->Reload();
 
 	this->ReloadStop();
 }
 
 int32 ACharacterBase::PickUpAmmo(int32 Ammo)
 {
-	int32 PickedUpAmount = Ammo;
-
-	this->Ammo += Ammo;
-	if (this->Ammo > this->AmmoCapacity)
-	{
-		PickedUpAmount = Ammo - (this->Ammo - this->AmmoCapacity);
-		this->Ammo = this->AmmoCapacity;
-	}
-
-	return PickedUpAmount;
+	return this->EquippedWeapon->AddAmmo(Ammo);
 }
 
 float ACharacterBase::GainHealth(float Health)

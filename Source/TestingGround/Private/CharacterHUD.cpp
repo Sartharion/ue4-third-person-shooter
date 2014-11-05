@@ -37,16 +37,19 @@ void ACharacterHUD::DrawAmmoHUD()
 	if (this->Font != NULL)
 	{
 		// Draw the remaining ammo
-		FVector2D AmmoPosition(Canvas->ClipX - Canvas->ClipX / 8.0f, Canvas->ClipY - Canvas->ClipY / 7.0f);
-		FText AmmoText = FText::FromString(FString::Printf(TEXT("Ammo: %d"), this->Character->Ammo));
-		FCanvasTextItem AmmoTextItem(AmmoPosition, AmmoText, this->Font, FLinearColor::White);
-		Canvas->DrawItem(AmmoTextItem);
+		if (this->Character->EquippedWeapon != NULL)
+		{
+			FVector2D AmmoPosition(Canvas->ClipX - Canvas->ClipX / 8.0f, Canvas->ClipY - Canvas->ClipY / 7.0f);
+			FText AmmoText = FText::FromString(FString::Printf(TEXT("Ammo: %d"), this->Character->EquippedWeapon->RemainingAmmo));
+			FCanvasTextItem AmmoTextItem(AmmoPosition, AmmoText, this->Font, FLinearColor::White);
+			Canvas->DrawItem(AmmoTextItem);
 
-		// Draw the remaining ammo in the clip of the gun
-		FVector2D ClipPosition(Canvas->ClipX - Canvas->ClipX / 8.0f, Canvas->ClipY - Canvas->ClipY / 10.0f);
-		FText ClipText = FText::FromString(FString::Printf(TEXT("Clip: %d"), this->Character->AmmoInClip));
-		FCanvasTextItem ClipTextItem(ClipPosition, ClipText, this->Font, FLinearColor::White);
-		Canvas->DrawItem(ClipTextItem);
+			// Draw the remaining ammo in the clip of the gun
+			FVector2D ClipPosition(Canvas->ClipX - Canvas->ClipX / 8.0f, Canvas->ClipY - Canvas->ClipY / 10.0f);
+			FText ClipText = FText::FromString(FString::Printf(TEXT("Clip: %d"), this->Character->EquippedWeapon->AmmoInClip));
+			FCanvasTextItem ClipTextItem(ClipPosition, ClipText, this->Font, FLinearColor::White);
+			Canvas->DrawItem(ClipTextItem);
+		}
 	}
 }
 

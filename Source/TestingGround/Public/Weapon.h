@@ -2,55 +2,53 @@
 
 #pragma once
 
+#include "Object.h"
 #include "ProjectileBase.h"
-#include "WeaponType.h"
+#include "Weapon.generated.h"
+
+UENUM(BlueprintType)
+namespace EWeaponType
+{
+	enum Type
+	{
+		Pistol,
+		Rifle,
+		Sniper,
+		Shotgun,
+		GranadeLauncher
+	};
+}
 
 /**
-*
-*/
-class TESTINGGROUND_API FWeapon
+ * 
+ */
+UCLASS(Blueprintable)
+class TESTINGGROUND_API UWeapon : public UObject
 {
-	FWeapon(EWeaponType::Type WeaponType, int32 AmmoCapacity, int32 ClipCapacity, TSubclassOf<AProjectileBase> ProjectileClass);
-	~FWeapon();
-	FWeapon(const FWeapon& Other);
+	GENERATED_UCLASS_BODY()
 
-	FWeapon& operator=(const FWeapon& Other);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	TEnumAsByte<EWeaponType::Type> WeaponType;
 
-	EWeaponType::Type GetWeaponType() const;
-
-	int32 GetAmmoCapacity() const;
-	void SetAmmoCapacity(int32 AmmoCapacity);
-
-	int32 GetClipCapacity() const;
-	void SetClipCapacity(int32 ClipCapacity);
-
-	int32 GetRemainingAmmo() const;
-	void SetRemainingAmmo(int32 RemainingAmmo);
-
-	int32 GetAmmoInClip() const;
-	void SetAmmoInClip(int32 AmmoInClip);
-
-	TSubclassOf<AProjectileBase> GetProjectileClass() const;
-	void SetProjectileClass(TSubclassOf<AProjectileBase> ProjectileClass);
-
-	void Reload();
-
-private:
-	/** Weapon type */
-	EWeaponType::Type WeaponType;
-
-	/** The total ammo capacity */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int32 AmmoCapacity;
 
-	/** The clip capacity */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int32 ClipCapacity;
 
-	/** The remaining ammo (the ammo in the clip in not included) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int32 RemainingAmmo;
 
-	/** The ammo loaded in the clip of the weapon */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int32 AmmoInClip;
 
-	/** A projectile class */
+	/** Projectile class to spawn */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 	TSubclassOf<AProjectileBase> ProjectileClass;
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void Reload();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	int32 AddAmmo(int32 Ammo);
 };

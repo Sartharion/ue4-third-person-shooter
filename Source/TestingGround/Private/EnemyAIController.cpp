@@ -118,7 +118,8 @@ bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 
 bool AEnemyAIController::ShootTarget(ACharacterBase* Target)
 {
-	if (this->ControlledCharacter->AmmoInClip == 0 &&
+	if (this->ControlledCharacter->EquippedWeapon != NULL &&
+		this->ControlledCharacter->EquippedWeapon->AmmoInClip == 0 &&
 		!this->ControlledCharacter->bIsReloading)
 	{
 		if (this->ControlledCharacter->bIsFiring)

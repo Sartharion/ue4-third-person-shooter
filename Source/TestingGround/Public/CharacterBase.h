@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Weapon.h"
 #include "IDamageable.h"
 #include "ProjectileBase.h"
 #include "GameFramework/Character.h"
@@ -35,22 +36,6 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character")
 	float HealthCapacity;
 
-	/** The ammo capacity */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-	int32 AmmoCapacity;
-
-	/** The clip capacity */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-	int32 ClipCapacity;
-
-	/** The current amount of ammo that the character has */
-	UPROPERTY(BlueprintReadOnly, Category = "Character")
-	int32 Ammo;
-
-	/** The amount of ammo loaded in the clip */
-	UPROPERTY(BlueprintReadOnly, Category = "Character")
-	int32 AmmoInClip;
-
 	/** Indicates if the character is sprinting */
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsSprinting;
@@ -75,16 +60,19 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsUsingRifle;
 
-	/** Projectile class to spawn when using rifle */
-	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
-	TSubclassOf<AProjectileBase> RifleProjectileClass;
+	/** The rifle of the character */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	TWeakObjectPtr<UWeapon> Rifle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TWeakObjectPtr<UWeapon> EquippedWeapon;
 
 	/** The socket name of the gun's muzzle */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FName GunMuzzleSocketName;
 
 	/** Gun muzzle's offset from the characters location. Use only if the character does not have weapon attached to him. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun|Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Gameplay")
 	FVector GunMuzzleOffset;
 
 	/** How many projectiles the character can fire each second, when he is using an autofire weapon */

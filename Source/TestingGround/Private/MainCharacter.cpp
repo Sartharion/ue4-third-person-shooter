@@ -74,11 +74,13 @@ void AMainCharacter::LookUp(float AxisValue)
 void AMainCharacter::OnFire()
 {
 	// Try and fire a projectile
-	if (this->RifleProjectileClass != NULL && this->bIsAiming && !this->bIsReloading)
+	if (this->EquippedWeapon != NULL &&
+		this->EquippedWeapon->ProjectileClass != NULL &&
+		this->bIsAiming && !this->bIsReloading)
 	{
 		this->OnFireEvent();
 
-		if (this->AmmoInClip > 0)
+		if (this->EquippedWeapon->AmmoInClip > 0)
 		{
 			UWorld* World = this->GetWorld();
 			if (World != NULL)
@@ -125,12 +127,8 @@ void AMainCharacter::OnFire()
 				const FRotator SpawnRotation = FRotationMatrix::MakeFromX(ProjectileDirection).Rotator();
 
 				// Spawn the projectile and reduce the ammo in the clip
-				if (this->bIsUsingRifle)
-				{
-					World->SpawnActor<AProjectileBase>(this->RifleProjectileClass, SpawnLocation, SpawnRotation);
-				}
-
-				this->AmmoInClip--;
+				World->SpawnActor<AProjectileBase>(this->EquippedWeapon->ProjectileClass, SpawnLocation, SpawnRotation);
+				this->EquippedWeapon->AmmoInClip--;
 			}
 		}
 	}

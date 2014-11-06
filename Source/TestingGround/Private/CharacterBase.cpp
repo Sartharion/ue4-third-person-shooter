@@ -37,9 +37,8 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->GunMuzzleOffset = FVector(75.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
 
 	// Set up the weapon
-	//this->Rifle = NewObject<UWeapon>();
-	//this->Rifle->WeaponType = EWeaponType::Rifle;
 	this->Rifle = NewObject<UWeapon>();
+	this->Rifle->WeaponType = EWeaponType::Rifle;
 	this->EquippedWeapon = NULL;
 
 	// Note: The skeletal mesh and animation blueprint references on the Mesh component (inherited from Character) 
@@ -302,9 +301,15 @@ void ACharacterBase::Reload()
 	this->ReloadStop();
 }
 
-int32 ACharacterBase::PickUpAmmo(int32 Ammo)
+int32 ACharacterBase::PickUpRifleAmmo(int32 Ammo)
 {
-	return this->EquippedWeapon->AddAmmo(Ammo);
+	int32 PickedUpAmount = 0;
+	if (this->Rifle != NULL)
+	{
+		PickedUpAmount = this->Rifle->AddAmmo(Ammo);
+	}
+
+	return PickedUpAmount;
 }
 
 float ACharacterBase::GainHealth(float Health)

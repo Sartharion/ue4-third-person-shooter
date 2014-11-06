@@ -8,7 +8,6 @@ AAmmoPickup::AAmmoPickup(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
 {
 	this->Ammo = 30;
-	this->PickUpAmmoMethodPtr = &AMainCharacter::PickUpAmmo;
 }
 
 void AAmmoPickup::OnPickedUp(APawn* Picker)

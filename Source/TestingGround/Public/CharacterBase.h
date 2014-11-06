@@ -84,12 +84,12 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	void Reload();
 
 	/**
-	 * The character picks up a specified amount of ammo.
+	 * The character picks up a specified amount of rifle ammo.
 	 * @param AmmoAmount - The amount of ammo that the character picks up
 	 * @return the amount of ammo that the character picked up (He may not pick all of the ammo if he reaches the AmmoCapacity)
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character Action")
-	int32 PickUpAmmo(int32 AmmoAmount);
+	int32 PickUpRifleAmmo(int32 AmmoAmount);
 
 	/**
 	 * The character gains a specified amount of health.

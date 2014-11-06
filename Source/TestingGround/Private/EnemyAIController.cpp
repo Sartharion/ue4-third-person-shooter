@@ -62,7 +62,7 @@ void AEnemyAIController::Tick(float DeltaTime)
 
 		GEngine->AddOnScreenDebugMessage(22, 2.0f, FColor::Red, FString(TEXT("TargetLocation")) + this->TargetLocation.ToString());
 
-		float ChaseAcceptanceRadius = 0.0f;
+		float ChaseAcceptanceRadius = 10.0f;
 		if (this->ShootTarget(this->Target))
 		{
 			ChaseAcceptanceRadius = ShootAcceptanceRadius;

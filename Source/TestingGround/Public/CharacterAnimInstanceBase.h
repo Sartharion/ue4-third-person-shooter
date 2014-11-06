@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Weapon.h"
 #include "CharacterBase.h"
 #include "Animation/AnimInstance.h"
 #include "CharacterAnimInstanceBase.generated.h"
@@ -52,9 +53,9 @@ class TESTINGGROUND_API UCharacterAnimInstanceBase : public UAnimInstance
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character")
 	bool bIsDead;
 
-	/** Indicates if the character is using a rifle */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character")
-	bool bIsUsingRifle;
+	/** The type of the weapon the character is currently using */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	TEnumAsByte<EWeaponType::Type> WeaponType;
 
 	virtual void BlueprintUpdateAnimation(float DeltaTimeX) override;
 

@@ -14,7 +14,7 @@ UCharacterAnimInstanceBase::UCharacterAnimInstanceBase(const class FPostConstruc
 	this->bIsFiring = false;
 	this->bIsReloading = false;
 	this->bIsDead = false;
-	this->bIsUsingRifle = false;
+	this->WeaponType = EWeaponType::None;
 }
 
 void UCharacterAnimInstanceBase::BlueprintInitializeAnimation()
@@ -42,7 +42,11 @@ void UCharacterAnimInstanceBase::BlueprintUpdateAnimation(float DeltaTimeX)
 		const FRotator CharacterRotation = this->Character->GetActorRotation();
 		this->Direction = this->CalculateDirection(CharacterVelocity, CharacterRotation);
 
-		this->bIsUsingRifle = this->Character->bIsUsingRifle;
+		if (this->Character->EquippedWeapon != NULL)
+		{
+			this->WeaponType = this->Character->EquippedWeapon->WeaponType;
+		}
+
 		this->bIsAiming = this->Character->bIsAiming;
 		this->bIsFiring = this->Character->bIsFiring;
 		this->bIsReloading = this->Character->bIsReloading;

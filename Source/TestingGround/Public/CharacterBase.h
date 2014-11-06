@@ -56,10 +56,6 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsDead;
 
-	/** Indicates if the character is using a rifle */
-	UPROPERTY(BlueprintReadOnly, Category = "Character")
-	bool bIsUsingRifle;
-
 	/** The rifle of the character */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	TWeakObjectPtr<UWeapon> Rifle;

@@ -20,7 +20,6 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->bIsSprinting = false;
 	this->bIsReloading = false;
 	this->bIsDead = false;
-	this->bIsUsingRifle = true;
 	this->SprintSpeed = 700.0f; // in centimeters / second
 	this->JogSpeed = 450.0f; // in centimeters / second
 	this->AimSpeed = 200.0f; // in centimeters / second
@@ -39,7 +38,7 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	// Set up the weapon
 	this->Rifle = NewObject<UWeapon>();
 	this->Rifle->WeaponType = EWeaponType::Rifle;
-	this->EquippedWeapon = NULL;
+	this->EquippedWeapon = this->Rifle;
 
 	// Note: The skeletal mesh and animation blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named BP_MainCharacter (to avoid direct content references in C++)
@@ -71,7 +70,8 @@ void ACharacterBase::Tick(float DeltaTime)
 		return;
 	}
 
-	if (this->bIsFiring && this->bIsUsingRifle)
+	if (this->EquippedWeapon != NULL && this->bIsFiring &&
+		this->EquippedWeapon->WeaponType == EWeaponType::Rifle)
 	{
 		this->FireDelayCounter += DeltaTime;
 		if (this->FireDelayCounter >= this->FireDelay)
@@ -256,7 +256,8 @@ void ACharacterBase::ReloadStart()
 		return;
 	}
 
-	if ((this->EquippedWeapon->AmmoInClip < this->EquippedWeapon->ClipCapacity) &&
+	if ((this->EquippedWeapon != NULL) &&
+		(this->EquippedWeapon->AmmoInClip < this->EquippedWeapon->ClipCapacity) &&
 		(this->EquippedWeapon->RemainingAmmo > 0))
 	{
 		this->bIsFiring = false;
@@ -296,9 +297,11 @@ void ACharacterBase::ReloadStop()
 
 void ACharacterBase::Reload()
 {
-	this->EquippedWeapon->Reload();
-
-	this->ReloadStop();
+	if (this->EquippedWeapon != NULL)
+	{
+		this->EquippedWeapon->Reload();
+		this->ReloadStop();
+	}
 }
 
 int32 ACharacterBase::PickUpRifleAmmo(int32 Ammo)

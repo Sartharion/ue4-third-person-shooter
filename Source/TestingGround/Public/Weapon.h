@@ -22,7 +22,7 @@ namespace EWeaponType
 /**
  * 
  */
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, BlueprintType)
 class TESTINGGROUND_API UWeapon : public UObject
 {
 	GENERATED_UCLASS_BODY()

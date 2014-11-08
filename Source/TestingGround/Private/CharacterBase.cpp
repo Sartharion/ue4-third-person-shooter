@@ -36,7 +36,7 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->GunMuzzleOffset = FVector(75.0f, 0.0f, 75.0f); // Default offset from the character location for projectiles to spawn
 
 	// Set up the weapon
-	this->Rifle = NewObject<UWeapon>();
+	this->Rifle = NewObject<UWeapon>(); // Create default rifle
 	this->Rifle->WeaponType = EWeaponType::Rifle;
 	this->EquippedWeapon = this->Rifle;
 
@@ -59,6 +59,20 @@ void ACharacterBase::BeginPlay()
 
 	this->FireDelay = 1.0f / this->ShotsPerSecond;
 	this->FireDelayCounter = 0.0f;
+
+	// Set up the weapon
+	if (this->RifleClass != NULL)
+	{
+		UWeapon* RifleWeapon = Cast<UWeapon>(this->RifleClass->GetDefaultObject());
+		if (RifleWeapon != NULL)
+		{
+			this->Rifle = RifleWeapon;
+			this->Rifle->RemainingAmmo = this->Rifle->AmmoCapacity - this->Rifle->ClipCapacity;
+			this->Rifle->AmmoInClip = this->Rifle->ClipCapacity;
+
+			this->EquippedWeapon = this->Rifle;
+		}
+	}
 }
 
 void ACharacterBase::Tick(float DeltaTime)

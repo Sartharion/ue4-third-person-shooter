@@ -56,11 +56,16 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	bool bIsDead;
 
+	/** The class used for the rifle of the character */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	TSubclassOf<UWeapon> RifleClass;
+
 	/** The rifle of the character */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 	TWeakObjectPtr<UWeapon> Rifle;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	/** A reference to the current equipped weapon */
+	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
 	TWeakObjectPtr<UWeapon> EquippedWeapon;
 
 	/** The socket name of the gun's muzzle */

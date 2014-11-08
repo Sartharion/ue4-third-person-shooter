@@ -10,6 +10,16 @@ UWeapon::UWeapon(const class FPostConstructInitializeProperties& PCIP)
 
 }
 
+void UWeapon::Init(const UWeapon& Weapon)
+{
+	this->WeaponType = Weapon.WeaponType;
+	this->ProjectileClass = Weapon.ProjectileClass;
+	this->AmmoCapacity = Weapon.AmmoCapacity;
+	this->ClipCapacity = Weapon.ClipCapacity;
+	this->RemainingAmmo = this->AmmoCapacity - this->ClipCapacity;
+	this->AmmoInClip = this->ClipCapacity;
+}
+
 void UWeapon::Reload()
 {
 	if ((this->AmmoInClip < this->ClipCapacity) && (this->RemainingAmmo > 0))
@@ -42,3 +52,4 @@ int32 UWeapon::AddAmmo(int32 Ammo)
 
 	return AddedAmount;
 }
+

@@ -66,9 +66,8 @@ void ACharacterBase::BeginPlay()
 		UWeapon* RifleWeapon = Cast<UWeapon>(this->RifleClass->GetDefaultObject());
 		if (RifleWeapon != NULL)
 		{
-			this->Rifle = RifleWeapon;
-			this->Rifle->RemainingAmmo = this->Rifle->AmmoCapacity - this->Rifle->ClipCapacity;
-			this->Rifle->AmmoInClip = this->Rifle->ClipCapacity;
+			this->Rifle = NewObject<UWeapon>();
+			this->Rifle->Init(*RifleWeapon);
 
 			this->EquippedWeapon = this->Rifle;
 		}

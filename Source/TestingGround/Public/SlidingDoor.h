@@ -73,6 +73,9 @@ class TESTINGGROUND_API ASlidingDoor : public AActor
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	/** Counts how many pawns are currently overlapping with the trigger */
+	int32 OverlappingPawns;
+
 	/** The counter that determines if the delay before closing has expired and the door need to be closed */
 	float DelayBeforeClosingCounter;
 

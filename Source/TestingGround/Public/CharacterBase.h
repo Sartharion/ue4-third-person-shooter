@@ -62,11 +62,11 @@ class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
 
 	/** The rifle of the character */
 	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
-	TWeakObjectPtr<UWeapon> Rifle;
+	UWeapon* Rifle;
 
 	/** A reference to the current equipped weapon */
 	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
-	TWeakObjectPtr<UWeapon> EquippedWeapon;
+	UWeapon* EquippedWeapon;
 
 	/** The socket name of the gun's muzzle */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")

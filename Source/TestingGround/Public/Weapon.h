@@ -28,6 +28,9 @@ class TESTINGGROUND_API UWeapon : public UObject
 {
 	GENERATED_UCLASS_BODY()
 
+	/** Initialized the weapon by copying the properties of another weapon */
+	void Init(const UWeapon& Weapon);
+
 	/** The type of the weapon (Rifle, Pistol, etc.) */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	TEnumAsByte<EWeaponType::Type> WeaponType;

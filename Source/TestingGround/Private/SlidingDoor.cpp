@@ -29,6 +29,7 @@ ASlidingDoor::ASlidingDoor(const class FPostConstructInitializeProperties& PCIP)
 	this->TriggerVolume->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	this->TriggerVolume->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
+	this->OverlappingPawns = 0;
 	this->SlideSpeed = 4.0f;
 	this->DelayBeforeClosing = 2.0f;
 	this->bDoorMustOpen = false;
@@ -139,6 +140,7 @@ void ASlidingDoor::OnDoorTriggerBeginOverlap(class AActor* OtherActor, class UPr
 {
 	if (this->LeftWing->StaticMesh != NULL || this->RightWing->StaticMesh != NULL)
 	{
+		this->OverlappingPawns++;
 		this->bDoorMustOpen = true;
 		this->bDoorMustClose = false;
 	}
@@ -148,7 +150,11 @@ void ASlidingDoor::OnDoorTriggerEndOverlap(class AActor* OtherActor, class UPrim
 {
 	if (this->LeftWing->StaticMesh != NULL || this->RightWing->StaticMesh != NULL)
 	{
-		this->DelayBeforeClosingCounter = this->DelayBeforeClosing;
-		this->bDoorMustClose = true;
+		this->OverlappingPawns--;
+		if (this->OverlappingPawns == 0)
+		{
+			this->DelayBeforeClosingCounter = this->DelayBeforeClosing;
+			this->bDoorMustClose = true;
+		}
 	}
 }

@@ -14,6 +14,7 @@ AEnemyAIController::AEnemyAIController(const class FPostConstructInitializePrope
 	this->TargetLocation = FVector::ZeroVector;
 	this->bIsTargetInRange = false;
 	this->bIsTargetInLineOfSight = false;
+	this->bIsUnawareHit = false;
 	this->PatrolPoint = 0;
 	this->WaitTimeAtPatrolPoint = 5.0f; // In seconds
 	this->WaitTimeAtPatrolPointCounter = 0.0f; // In seconds
@@ -53,14 +54,15 @@ void AEnemyAIController::Tick(float DeltaTime)
 		float ShootAcceptanceRadius = AggroTriggerRadius * 0.75f;
 		this->bIsTargetInRange = this->IsTargetInRange(this->Target, ShootAcceptanceRadius);
 		this->bIsTargetInLineOfSight = this->IsTargetInLineOfSight(this->Target);
-		GEngine->AddOnScreenDebugMessage(24, 2.0f, FColor::Cyan, FString::Printf(TEXT("IsTargetInLineOfSight: %d"), bIsTargetInLineOfSight));
+		//GEngine->AddOnScreenDebugMessage(24, 2.0f, FColor::Cyan, FString::Printf(TEXT("IsTargetInLineOfSight: %d"), bIsTargetInLineOfSight));
 
 		if (this->bIsTargetInLineOfSight)
 		{
+			this->bIsUnawareHit = false;
 			this->TargetLocation = this->Target->GetActorLocation();
 		}
 
-		GEngine->AddOnScreenDebugMessage(22, 2.0f, FColor::Red, FString(TEXT("TargetLocation")) + this->TargetLocation.ToString());
+		//GEngine->AddOnScreenDebugMessage(22, 2.0f, FColor::Red, FString(TEXT("TargetLocation")) + this->TargetLocation.ToString());
 
 		float ChaseAcceptanceRadius = 10.0f;
 		if (this->ShootTarget(this->Target))
@@ -74,9 +76,18 @@ void AEnemyAIController::Tick(float DeltaTime)
 			this->Patrol(this->ControlledCharacter->PatrolPoints);
 		}
 	}
-	else
+	else if (!this->bIsUnawareHit)
 	{
+		this->ControlledCharacter->bIsPatrolling = true;
 		this->Patrol(this->ControlledCharacter->PatrolPoints);
+	}
+	else if (this->bIsUnawareHit)
+	{
+		float DistanceToSearchPoint = (this->ControlledCharacter->GetActorLocation() - this->UnawareHitSearchLocation).Size();
+		if (DistanceToSearchPoint < 150.0f)
+		{
+			this->bIsUnawareHit = false;
+		}
 	}
 }
 
@@ -100,7 +111,7 @@ bool AEnemyAIController::ChaseTarget(ACharacterBase* Target, float AcceptanceRad
 	{
 		bIsChasingTarget = true;
 
-		GEngine->AddOnScreenDebugMessage(25, 2.0f, FColor::Blue, FString::Printf(TEXT("AcceptanceRadius: %.2f"), AcceptanceRadius));
+		//GEngine->AddOnScreenDebugMessage(25, 2.0f, FColor::Blue, FString::Printf(TEXT("AcceptanceRadius: %.2f"), AcceptanceRadius));
 		EPathFollowingRequestResult::Type PathRequestResult = this->MoveToLocation(this->TargetLocation, AcceptanceRadius);
 		if (PathRequestResult == EPathFollowingRequestResult::AlreadyAtGoal)
 		{
@@ -206,6 +217,10 @@ void AEnemyAIController::Patrol(const TArray<ATargetPoint*>& PatrolPoints)
 		if (this->ControlledCharacter->bIsFiring)
 		{
 			this->ControlledCharacter->FireStop();
+		}
+
+		if (this->ControlledCharacter->bIsAiming)
+		{
 			this->ControlledCharacter->AimStop();
 		}
 
@@ -224,9 +239,12 @@ void AEnemyAIController::Patrol(const TArray<ATargetPoint*>& PatrolPoints)
 
 void AEnemyAIController::RespondToUnawareHit(const FHitResult& Hit, const AActor* DamageCauser)
 {
+	this->bIsUnawareHit = true;
+
 	if (this->bIsTargetInLineOfSight)
 	{
 		// The enemy is aware of the target's location, so the hit is not unaware
+		this->bIsUnawareHit = false;
 		return;
 	}
 
@@ -249,6 +267,8 @@ void AEnemyAIController::RespondToUnawareHit(const FHitResult& Hit, const AActor
 				this->ControlledCharacter->bIsPatrolling = false;
 				this->ControlledCharacter->SprintStart();
 				this->MoveToLocation(HitResult.Location);
+
+				this->UnawareHitSearchLocation = HitResult.Location;
 			}
 		}		
 	}
@@ -308,8 +328,8 @@ bool AEnemyAIController::IsTargetInLineOfSight(AActor* Target) const
 bool AEnemyAIController::IsTargetInRange(AActor* Target, float AcceptanceRadius) const
 {
 	float DistanceToTarget = (Target->GetActorLocation() - this->ControlledCharacter->GetActorLocation()).Size();
-	GEngine->AddOnScreenDebugMessage(20, 2.0f, FColor::Yellow, FString::Printf(TEXT("DistanceToTarget: %.2f"), DistanceToTarget));
-	GEngine->AddOnScreenDebugMessage(21, 2.0f, FColor::Green, FString::Printf(TEXT("AcceptanceRadius: %.2f"), AcceptanceRadius));
+	//GEngine->AddOnScreenDebugMessage(20, 2.0f, FColor::Yellow, FString::Printf(TEXT("DistanceToTarget: %.2f"), DistanceToTarget));
+	//GEngine->AddOnScreenDebugMessage(21, 2.0f, FColor::Green, FString::Printf(TEXT("AcceptanceRadius: %.2f"), AcceptanceRadius));
 
 	bool bIsCloseEnough = (DistanceToTarget <= AcceptanceRadius);
 

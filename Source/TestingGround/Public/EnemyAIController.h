@@ -110,6 +110,12 @@ protected:
 	/** The last known location of the followed target */
 	FVector TargetLocation;
 
+	/** The location where the enemy searches for the target, if he was hit unaware of the target's location */
+	FVector UnawareHitSearchLocation;
+
+	/** Indicates if the controlled character was hit unaware */
+	bool bIsUnawareHit;
+
 	/** 
 	 * The counter (in seconds) that determines when the enemy character should go to the next patrol point.
 	 * When this counter reaches the WaitTimeAtPatrolPoint (in seconds), then the enemy character start moving to the next patrol point.

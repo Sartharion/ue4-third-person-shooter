@@ -116,12 +116,12 @@ void AMainCharacter::OnFire()
 				{
 					ProjectileDirection = HitResult.Location - SpawnLocation; // If we hit something, we find more accurate projectile direction
 
-					//DrawDebugLine(World, SpawnLocation, HitResult.Location, FColor::Red, false, 5.0f, 2.0f);
-					//AActor* HitActor = HitResult.Actor.Get();
-					//if (HitActor != NULL)
-					//{
-					//	GEngine->AddOnScreenDebugMessage(10, 2.0f, FColor::White, HitActor->GetName());
-					//}
+					DrawDebugLine(World, SpawnLocation, HitResult.Location, FColor::Red, false, 5.0f, 2.0f);
+					AActor* HitActor = HitResult.Actor.Get();
+					if (HitActor != NULL)
+					{
+						GEngine->AddOnScreenDebugMessage(10, 2.0f, FColor::White, HitActor->GetName());
+					}
 				}
 
 				const FRotator SpawnRotation = FRotationMatrix::MakeFromX(ProjectileDirection).Rotator();

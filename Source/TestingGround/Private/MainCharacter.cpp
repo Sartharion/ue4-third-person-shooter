@@ -107,8 +107,8 @@ void AMainCharacter::OnFire()
 				const FVector RayEnd = RayStart + (ForwardVector * 10000.0f);
 				FCollisionQueryParams QueryParams(FName(TEXT("ProjectileTrace")), true, this);
 
-				//DrawDebugLine(World, RayStart, RayEnd, FColor::Green, false, 5.0f, 0, 2.0f);
-				//DrawDebugLine(World, SpawnLocation, RayEnd, FColor::Blue, false, 5.0f, 2.0f);
+				//DrawDebugLine(World, RayStart, RayEnd, FColor::Green, false, 5.0f, (uint8)'\000', 1.0f);
+				//DrawDebugLine(World, SpawnLocation, RayEnd, FColor::Blue, false, 5.0f, (uint8)'\000', 1.0f);
 
 				FVector ProjectileDirection = RayEnd - SpawnLocation; // The default projectile direction is from the SpawnLocation to the RayEnd
 				FHitResult HitResult;
@@ -116,7 +116,7 @@ void AMainCharacter::OnFire()
 				{
 					ProjectileDirection = HitResult.Location - SpawnLocation; // If we hit something, we find more accurate projectile direction
 
-					DrawDebugLine(World, SpawnLocation, HitResult.Location, FColor::Red, false, 5.0f, 2.0f);
+					DrawDebugLine(World, SpawnLocation, HitResult.Location, FColor::Red, false, 5.0f, (uint8)'\000', 1.0f);
 					AActor* HitActor = HitResult.Actor.Get();
 					if (HitActor != NULL)
 					{

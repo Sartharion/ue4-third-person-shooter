@@ -16,15 +16,15 @@ class TESTINGGROUND_API AMainCharacter : public ACharacterBase
 
 	/** Camera boom, positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
-	TSubobjectPtr<USpringArmComponent> CameraBoom;
+	USpringArmComponent* CameraBoom;
 
 	/** Extension for the CameraBoom. Used for OTS(Over The Shoulder) view */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
-	TSubobjectPtr<USpringArmComponent> CameraBoomExtension;
+	USpringArmComponent* CameraBoomExtension;
 
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
-	TSubobjectPtr<UCameraComponent> FollowCamera;
+	UCameraComponent* FollowCamera;
 
 	/** The length of the camera boom while the character is aiming */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")

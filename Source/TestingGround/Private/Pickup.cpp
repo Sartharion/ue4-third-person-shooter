@@ -4,7 +4,7 @@
 #include "Pickup.h"
 
 
-APickup::APickup(const class FPostConstructInitializeProperties& PCIP)
+APickup::APickup(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->PrimaryActorTick.bCanEverTick = true;

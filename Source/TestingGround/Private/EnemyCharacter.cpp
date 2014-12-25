@@ -5,7 +5,7 @@
 #include "EnemyAIController.h"
 
 
-AEnemyCharacter::AEnemyCharacter(const class FPostConstructInitializeProperties& PCIP)
+AEnemyCharacter::AEnemyCharacter(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->AggroTrigger = PCIP.CreateDefaultSubobject<USphereComponent>(this, FName(TEXT("AggroTrigger")));

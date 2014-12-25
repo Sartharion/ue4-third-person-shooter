@@ -15,11 +15,11 @@ class TESTINGGROUND_API APickup : public AActor
 
 	/** The collision component of the Pickup */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-	TSubobjectPtr<UBoxComponent> BoxComponent;
+	UBoxComponent* BoxComponent;
 
 	/** The static mesh of the Pickup */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pickup")
-	TSubobjectPtr<UStaticMeshComponent> PickupMesh;
+	UStaticMeshComponent* PickupMesh;
 
 	/** The sound played when the pickup is picked up */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Pickup Sound")

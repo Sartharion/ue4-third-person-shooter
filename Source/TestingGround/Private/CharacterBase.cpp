@@ -4,10 +4,10 @@
 #include "CharacterBase.h"
 
 
-ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& PCIP)
+ACharacterBase::ACharacterBase(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
-	this->CapsuleComponent->InitCapsuleSize(42.0f, 95.0f);
+	this->GetCapsuleComponent()->InitCapsuleSize(42.0f, 95.0f);
 
 	// Don't rotate the character when the controller is rotated (This will affect only the camera)
 	this->bUseControllerRotationPitch = false;
@@ -23,11 +23,11 @@ ACharacterBase::ACharacterBase(const class FPostConstructInitializeProperties& P
 	this->SprintSpeed = 700.0f; // in centimeters / second
 	this->JogSpeed = 450.0f; // in centimeters / second
 	this->AimSpeed = 200.0f; // in centimeters / second
-	this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
-	this->CharacterMovement->bOrientRotationToMovement = true;
-	this->CharacterMovement->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // The character rotates at this rotation rate
-	this->CharacterMovement->JumpZVelocity = 350.0f;
-	this->CharacterMovement->AirControl = 0.2f; // 20% of the total control
+	this->GetCharacterMovement()->MaxWalkSpeed = this->JogSpeed;
+	this->GetCharacterMovement()->bOrientRotationToMovement = true;
+	this->GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // The character rotates at this rotation rate
+	this->GetCharacterMovement()->JumpZVelocity = 350.0f;
+	this->GetCharacterMovement()->AirControl = 0.2f; // 20% of the total control
 
 	// Set up the gameplay features
 	this->HealthCapacity = 1000.0f;
@@ -50,12 +50,12 @@ void ACharacterBase::BeginPlay()
 
 	this->Health = this->HealthCapacity;
 
-	if (this->Mesh->GetNumChildrenComponents() > 0)
+	if (this->GetMesh()->GetNumChildrenComponents() > 0)
 	{
-		this->GunMesh = Cast<USkeletalMeshComponent>(this->Mesh->GetChildComponent(0));
+		this->GunMesh = Cast<USkeletalMeshComponent>(this->GetMesh()->GetChildComponent(0));
 	}
 
-	this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+	this->GetCharacterMovement()->MaxWalkSpeed = this->JogSpeed;
 
 	this->FireDelay = 1.0f / this->ShotsPerSecond;
 	this->FireDelayCounter = 0.0f;
@@ -142,7 +142,7 @@ void ACharacterBase::SprintStart()
 
 	if (!this->bIsAiming && !this->bIsReloading)
 	{
-		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeed = this->SprintSpeed;
 	}
 }
 
@@ -157,7 +157,7 @@ void ACharacterBase::SprintStop()
 
 	if (!this->bIsAiming)
 	{
-		this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeed = this->JogSpeed;
 	}
 }
 
@@ -171,8 +171,8 @@ void ACharacterBase::AimStart()
 	this->bIsAiming = true;
 
 	this->bUseControllerRotationYaw = true; // While the character is aiming he must use the controller's yaw rotation
-	this->CharacterMovement->bOrientRotationToMovement = false; // And must not orient his rotation according to movement
-	this->CharacterMovement->MaxWalkSpeed = this->AimSpeed; // Has to use the AimSpeed
+	this->GetCharacterMovement()->bOrientRotationToMovement = false; // And must not orient his rotation according to movement
+	this->GetCharacterMovement()->MaxWalkSpeed = this->AimSpeed; // Has to use the AimSpeed
 }
 
 void ACharacterBase::AimStop()
@@ -186,16 +186,16 @@ void ACharacterBase::AimStop()
 	this->bIsAiming = false;
 
 	this->bUseControllerRotationYaw = false; // While the character is not aiming he must not use the controller's yaw rotation
-	this->CharacterMovement->bOrientRotationToMovement = true; // And must orient his rotation according to movement
+	this->GetCharacterMovement()->bOrientRotationToMovement = true; // And must orient his rotation according to movement
 
 	// The character needs to start walking normaly again 
 	if (this->bIsSprinting)
 	{
-		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeed = this->SprintSpeed;
 	}
 	else
 	{
-		this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeed = this->JogSpeed;
 	}
 }
 
@@ -279,7 +279,7 @@ void ACharacterBase::ReloadStart()
 
 		if (!this->bIsAiming)
 		{
-			this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+			this->GetCharacterMovement()->MaxWalkSpeed = this->JogSpeed;
 		}
 	}
 }
@@ -296,15 +296,15 @@ void ACharacterBase::ReloadStop()
 	// The character needs to start walking normaly again 
 	if (this->bIsAiming)
 	{
-		this->CharacterMovement->MaxWalkSpeed = this->AimSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeed = this->AimSpeed;
 	}
 	else if (this->bIsSprinting)
 	{
-		this->CharacterMovement->MaxWalkSpeed = this->SprintSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeed = this->SprintSpeed;
 	}
 	else
 	{
-		this->CharacterMovement->MaxWalkSpeed = this->JogSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeed = this->JogSpeed;
 	}
 }
 
@@ -350,8 +350,8 @@ void ACharacterBase::TakeDamage(float Damage, const FHitResult& Hit, const AActo
 	{
 		this->bIsDead = true;
 
-		this->CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		this->Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		this->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		this->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }
 

@@ -5,7 +5,7 @@
 #include "../Public/CharacterBase.h"
 
 
-AProjectileBase::AProjectileBase(const class FPostConstructInitializeProperties& PCIP)
+AProjectileBase::AProjectileBase(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	// Use a sphere as a simple collision representation

@@ -4,7 +4,7 @@
 #include "Weapon.h"
 
 
-UWeapon::UWeapon(const class FPostConstructInitializeProperties& PCIP)
+UWeapon::UWeapon(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 

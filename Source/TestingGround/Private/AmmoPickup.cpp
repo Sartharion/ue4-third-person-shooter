@@ -4,7 +4,7 @@
 #include "AmmoPickup.h"
 
 
-AAmmoPickup::AAmmoPickup(const class FPostConstructInitializeProperties& PCIP)
+AAmmoPickup::AAmmoPickup(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->Ammo = 30;

@@ -4,7 +4,7 @@
 #include "CharacterAnimInstanceBase.h"
 
 
-UCharacterAnimInstanceBase::UCharacterAnimInstanceBase(const class FPostConstructInitializeProperties& PCIP)
+UCharacterAnimInstanceBase::UCharacterAnimInstanceBase(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->Speed = 0.0f;

@@ -15,19 +15,19 @@ class TESTINGGROUND_API ASlidingDoor : public AActor
 
 	/** The static mesh of the door frame */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sliding Door")
-	TSubobjectPtr<UStaticMeshComponent> DoorFrame;
+	UStaticMeshComponent* DoorFrame;
 
 	/** The static mesh of the left wing of the door */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sliding Door")
-	TSubobjectPtr<UStaticMeshComponent> LeftWing;
+	UStaticMeshComponent* LeftWing;
 
 	/** The static mesh of the right wing of the door */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sliding Door")
-	TSubobjectPtr<UStaticMeshComponent> RightWing;
+	UStaticMeshComponent* RightWing;
 
 	/** The root component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-	TSubobjectPtr<UBoxComponent> TriggerVolume;
+	UBoxComponent* TriggerVolume;
 
 	/** A Delay before closing the door (in seconds) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sliding Door")

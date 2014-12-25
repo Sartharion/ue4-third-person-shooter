@@ -4,7 +4,7 @@
 #include "CharacterHUD.h"
 
 
-ACharacterHUD::ACharacterHUD(const class FPostConstructInitializeProperties& PCIP)
+ACharacterHUD::ACharacterHUD(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	

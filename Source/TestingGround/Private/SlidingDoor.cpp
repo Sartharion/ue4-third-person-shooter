@@ -4,7 +4,7 @@
 #include "SlidingDoor.h"
 
 
-ASlidingDoor::ASlidingDoor(const class FPostConstructInitializeProperties& PCIP)
+ASlidingDoor::ASlidingDoor(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->PrimaryActorTick.bCanEverTick = true;

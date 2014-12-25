@@ -19,11 +19,11 @@ class TESTINGGROUND_API AProjectileBase : public AActor
 
 	/** Sphere collision component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
-	TSubobjectPtr<class USphereComponent> CollisionComponent;
+	USphereComponent* CollisionComponent;
 
 	/** Projectile movement component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	TSubobjectPtr<class UProjectileMovementComponent> ProjectileMovement;
+	UProjectileMovementComponent* ProjectileMovement;
 
 	/** Gets the location where the projectile spawned */
 	UFUNCTION(BlueprintCallable, Category = "Projectile")

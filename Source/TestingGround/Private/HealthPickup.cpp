@@ -5,7 +5,7 @@
 #include "MainCharacter.h"
 
 
-AHealthPickup::AHealthPickup(const class FPostConstructInitializeProperties& PCIP)
+AHealthPickup::AHealthPickup(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->Health = 500.0f;

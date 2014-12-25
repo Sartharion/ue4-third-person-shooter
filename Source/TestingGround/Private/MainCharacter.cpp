@@ -4,7 +4,7 @@
 #include "MainCharacter.h"
 
 
-AMainCharacter::AMainCharacter(const class FPostConstructInitializeProperties& PCIP)
+AMainCharacter::AMainCharacter(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	// Create a camera boom (pulls in towards the player if there is a collision)

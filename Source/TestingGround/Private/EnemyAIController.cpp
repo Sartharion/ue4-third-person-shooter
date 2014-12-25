@@ -6,7 +6,7 @@
 #include "ProjectileBase.h"
 
 
-AEnemyAIController::AEnemyAIController(const class FPostConstructInitializeProperties& PCIP)
+AEnemyAIController::AEnemyAIController(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->FieldOfView = 150.0f; // The FOV of the enemy character in degrees

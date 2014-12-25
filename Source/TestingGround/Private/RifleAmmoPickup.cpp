@@ -4,7 +4,7 @@
 #include "RifleAmmoPickup.h"
 
 
-ARifleAmmoPickup::ARifleAmmoPickup(const class FPostConstructInitializeProperties& PCIP)
+ARifleAmmoPickup::ARifleAmmoPickup(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->PickUpAmmoMethodPtr = &AMainCharacter::PickUpRifleAmmo;

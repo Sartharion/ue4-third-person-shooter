@@ -31,7 +31,7 @@ class TESTINGGROUND_API AProjectileBase : public AActor
 
 	/** Gets the damage that the projectile deals on impact */
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	virtual float GetDamage() const;
+	float GetDamage() const;
 
 	/** Called when the projectile hits something */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Projectile")

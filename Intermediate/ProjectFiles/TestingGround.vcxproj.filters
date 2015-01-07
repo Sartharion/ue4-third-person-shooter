@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\TestingGround.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{2B94BCFC-165C-4932-84D6-B91FCF468F76}</UniqueIdentifier>
+      <UniqueIdentifier>{6FC5D41E-762E-43FD-9683-F04C0A2995A3}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\TestingGround.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{61BCE39B-9DB8-47F4-9099-CBDFF9B4591F}</UniqueIdentifier>
+      <UniqueIdentifier>{0BF2F417-A9BC-4A75-8530-60C8334DF700}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEngine.ini">
       <Filter>Config</Filter>
@@ -24,7 +24,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\TestingGround">
-      <UniqueIdentifier>{AD2ED0C7-5E56-4123-85B4-17C22C7A5748}</UniqueIdentifier>
+      <UniqueIdentifier>{2DC9933D-ECAD-425A-A815-5AD48EEECF57}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\TestingGround\TestingGround.Build.cs">
       <Filter>Source\TestingGround</Filter>
@@ -36,12 +36,15 @@
       <Filter>Source\TestingGround</Filter>
     </ClInclude>
     <Filter Include="Source\TestingGround\Private">
-      <UniqueIdentifier>{28BB5637-D353-4E94-BA60-230EA5825EA4}</UniqueIdentifier>
+      <UniqueIdentifier>{4734AC0A-2788-4432-A687-7F35E578ED53}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\TestingGround\Private\CharacterAnimInstanceBase.cpp">
       <Filter>Source\TestingGround\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TestingGround\Private\CharacterHUD.cpp">
+      <Filter>Source\TestingGround\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TestingGround\Private\DamageableObject.cpp">
       <Filter>Source\TestingGround\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TestingGround\Private\EnemyAIController.cpp">
@@ -57,7 +60,7 @@
       <Filter>Source\TestingGround\Private</Filter>
     </ClCompile>
     <Filter Include="Source\TestingGround\Public">
-      <UniqueIdentifier>{C0367EFB-C487-4A3B-B2E1-53C90E8E5643}</UniqueIdentifier>
+      <UniqueIdentifier>{551EB5F1-EAE3-499E-8C4F-FC7D5A967BD9}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\TestingGround\Public\CharacterAnimInstanceBase.h">
       <Filter>Source\TestingGround\Public</Filter>
@@ -65,10 +68,10 @@
     <ClInclude Include="..\..\Source\TestingGround\Public\CharacterHUD.h">
       <Filter>Source\TestingGround\Public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\EnemyAIController.h">
+    <ClInclude Include="..\..\Source\TestingGround\Public\DamageableObject.h">
       <Filter>Source\TestingGround\Public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\IDamageable.h">
+    <ClInclude Include="..\..\Source\TestingGround\Public\EnemyAIController.h">
       <Filter>Source\TestingGround\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TestingGround\Public\MethodDelegate.h">
@@ -84,10 +87,10 @@
       <Filter>Source\TestingGround\Public</Filter>
     </ClInclude>
     <Filter Include="Source\TestingGround\Resources">
-      <UniqueIdentifier>{5E80260B-B7F1-462B-B861-1987001A0516}</UniqueIdentifier>
+      <UniqueIdentifier>{0F58CEBC-2A9D-42F4-8831-DBB9EC835E52}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\TestingGround\Resources\Windows">
-      <UniqueIdentifier>{C6BE8DF1-4698-4C94-BDF9-3FE61C979395}</UniqueIdentifier>
+      <UniqueIdentifier>{3D678A86-659B-4853-8277-EB61D3A37680}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\TestingGround\Resources\Windows\TestingGround.ico">
       <Filter>Source\TestingGround\Resources\Windows</Filter>
@@ -97,18 +100,41 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source\TestingGround\Private\Characters">
-      <UniqueIdentifier>{cdbdc8e7-64c2-4267-85bb-b598463d1330}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\TestingGround\Private\Pickups">
-      <UniqueIdentifier>{1ef32cf2-e17c-45e6-8276-27235c2f30ae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\TestingGround\Public\Characters">
-      <UniqueIdentifier>{a2aef5fc-b471-4d5a-86ae-253f37c097a0}</UniqueIdentifier>
+      <UniqueIdentifier>{512b8b1c-4553-4d85-bfa7-7e29e65135ac}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\TestingGround\Public\Pickups">
-      <UniqueIdentifier>{8aef8642-87b2-42fe-af9a-ef9cc78d2020}</UniqueIdentifier>
+      <UniqueIdentifier>{3c21b048-1b90-42b1-8ffc-28184fa9c7f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\TestingGround\Private\Characters">
+      <UniqueIdentifier>{d35ddf5c-f6a2-413c-8363-8391a704004a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TestingGround\Private\Pickups">
+      <UniqueIdentifier>{0e34ee06-ca45-4eea-b570-818d79a0cf5a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\TestingGround\Public\CharacterBase.h">
+      <Filter>Source\TestingGround\Public\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestingGround\Public\EnemyCharacter.h">
+      <Filter>Source\TestingGround\Public\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h">
+      <Filter>Source\TestingGround\Public\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h">
+      <Filter>Source\TestingGround\Public\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestingGround\Public\HealthPickup.h">
+      <Filter>Source\TestingGround\Public\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestingGround\Public\Pickup.h">
+      <Filter>Source\TestingGround\Public\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestingGround\Public\RifleAmmoPickup.h">
+      <Filter>Source\TestingGround\Public\Pickups</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TestingGround\Private\CharacterBase.cpp">
@@ -132,28 +158,5 @@
     <ClCompile Include="..\..\Source\TestingGround\Private\RifleAmmoPickup.cpp">
       <Filter>Source\TestingGround\Private\Pickups</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\TestingGround\Public\MainCharacter.h">
-      <Filter>Source\TestingGround\Public\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\CharacterBase.h">
-      <Filter>Source\TestingGround\Public\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\EnemyCharacter.h">
-      <Filter>Source\TestingGround\Public\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\AmmoPickup.h">
-      <Filter>Source\TestingGround\Public\Pickups</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\HealthPickup.h">
-      <Filter>Source\TestingGround\Public\Pickups</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\Pickup.h">
-      <Filter>Source\TestingGround\Public\Pickups</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TestingGround\Public\RifleAmmoPickup.h">
-      <Filter>Source\TestingGround\Public\Pickups</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

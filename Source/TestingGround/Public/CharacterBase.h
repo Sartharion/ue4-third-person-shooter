@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Weapon.h"
-#include "IDamageable.h"
+#include "DamageableObject.h"
 #include "ProjectileBase.h"
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
@@ -12,7 +12,7 @@
  *
  */
 UCLASS()
-class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageable
+class TESTINGGROUND_API ACharacterBase : public ACharacter, public IDamageableObject
 {
 	GENERATED_UCLASS_BODY()	
 

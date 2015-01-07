@@ -2,7 +2,7 @@
 
 #include "TestingGround.h"
 #include "ProjectileBase.h"
-#include "../Public/CharacterBase.h"
+#include "DamageableObject.h"
 
 
 AProjectileBase::AProjectileBase(const class FObjectInitializer& PCIP)
@@ -56,10 +56,10 @@ void AProjectileBase::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 			OtherComp->AddImpulseAtLocation(this->GetVelocity() * 100.0f, this->GetActorLocation());
 		}
 
-		ACharacterBase* Character = Cast<ACharacterBase>(OtherActor);
-		if (Character != NULL)
+		IDamageableObject* DamageableObject = Cast<IDamageableObject>(OtherActor);
+		if (DamageableObject != NULL)
 		{
-			Character->TakeDamage(this->GetDamage(), Hit, this);
+			DamageableObject->TakeDamage(this->GetDamage(), Hit, this);
 		}
 	}
 

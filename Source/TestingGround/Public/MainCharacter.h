@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CharacterBase.h"
-#include "IDamageable.h"
 #include "MainCharacter.generated.h"
 
 /**
